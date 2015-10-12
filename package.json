@@ -4,7 +4,8 @@
   "description": "",
   "main": "Gruntfile.js",
   "dependencies": {
-    "grunt-browser-sync": "^2.1.3"
+    "grunt-browser-sync": "^2.1.3",
+    "react-svgicon": "0.0.2"
   },
   "devDependencies": {
     "eslint": "^1.6.0",

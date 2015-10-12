@@ -5,9 +5,7 @@ module.exports = function(grunt) {
       default_options: {
         files: {
           src: [
-            "styles.scss",
-            "*.html",
-            "*.js",
+            "build/*"
           ]
         },
         options: {
@@ -21,14 +19,14 @@ module.exports = function(grunt) {
     },
     jade: {
       index: {
-        src: ['index.jade'],
+        src: ['dev/*.jade'],
         dest: 'index.html'
       }
     },
     sass: {
       distrib: {
         files: {
-          'build.css':'styles.scss'
+          'build/build.css':'dev/styles.scss'
         }
       }
     },
@@ -39,26 +37,26 @@ module.exports = function(grunt) {
         dist: {
             files: [
                 {
-                    src: ['app.js'],
-                    dest: 'app.jsx.js'
+                    src: ['dev/app.js'],
+                    dest: 'build/app.jsx.js'
                 }
             ]
         }
     },
     watch: {
       indexJade: {
-        files: ['*.jade'],
+        files: ['dev/*.jade'],
         tasks: ['jade:index']
       },
       css: {
-        files: ['styles.scss'],
+        files: ['dev/*.scss'],
         tasks: ['sass'],
         options: {
           livereload: true
         },
       },
       js: {
-        files: ["app.js"],
+        files: ["dev/app.js"],
         tasks: ["babel"]
       }
     }

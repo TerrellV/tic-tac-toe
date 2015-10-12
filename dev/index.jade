@@ -1,13 +1,18 @@
 doctype html
 html(lang="en")
   head
-    link(rel="stylesheet" href="build.css")
+    link(rel="stylesheet" href="build/build.css")
     link(rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.5/material.indigo-pink.min.css")
   body
+    include sprites.jade
+    header.mdl-shadow--6dp
+      h1 Tic-Tac-Toe
+    
+    div#main
   
   
   script(src="https://code.jquery.com/jquery-2.1.4.min.js")
-  script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.min.js")
-  script(src="app.jsx.js")
+  script(src="https://fb.me/react-0.14.0.min.js")
+  script(src="build/app.jsx.js")
   
     

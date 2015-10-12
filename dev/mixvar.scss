@@ -1,0 +1,52 @@
+$dark: #222831;
+$grey: #58606B;
+$teal: #00ADB5;
+$white: #EEEEEE;
+
+$light-box: #F4F4F4;
+$dark-box: darken($light-box,5%);
+
+@mixin box-sizing ($str) {
+  -webkit-box-sizing: #{$str};
+  -moz-box-sizing: #{$str};
+  box-sizing: #{$str};
+}
+@mixin animation( $str ) {
+  -webkit-animation: #{$str};
+  -moz-animation: #{$str};
+  -ms-animation: #{$str};
+  -o-animation: #{$str};
+  animation: #{$str};
+}
+@mixin transition( $str ) {
+  -webkit-transition: #{$str};
+  -moz-transition: #{$str};
+  -ms-transition: #{$str};
+  -o-transition: #{$str};
+  transition: #{$str};
+}
+@mixin transform( $str ) {
+  -webkit-transform: #{$str};
+  -moz-transform: #{$str};
+  -ms-transform: #{$str};
+  -o-transform: #{$str};
+  transform: #{$str};
+}
+
+// centering
+@mixin center-me{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    @include transform('translate(-50%,-50%)');
+}
+@mixin center-me-vert{
+  position: absolute;
+  top: 50%;
+  @include transform("translateY(-50%)");
+}
+@mixin center-me-horiz{
+  position: absolute;
+  left: 50%;
+  @include transform("translateX(-50%)");
+}
