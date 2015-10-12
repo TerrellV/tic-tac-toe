@@ -87,12 +87,6 @@ var Box = React.createClass({
   getInitialState: function getInitialState() {
     return {};
   },
-  componentDidUpdate: function componentDidUpdate(a, b) {
-    // did update --- previous props(a), and state(b)
-  },
-  componentWillUpdate: function componentWillUpdate(a, b) {
-    // will update --- new props(a), and state(b)
-  },
   makeMoves: function makeMoves(userBoxId, event) {
     var props = this.props;
     // if its the first move then ...
@@ -107,7 +101,6 @@ var Box = React.createClass({
         this.markBox(userBoxId, "x", "teal-box");
         // make choice for comp
         var boxId = this.computerChoice();
-        console.log(boxId);
         this.markBox(boxId, "o", "grey-box");
       }
     }
@@ -129,7 +122,7 @@ var Box = React.createClass({
   },
   twoInRow: function twoInRow() {
     // check for matches with computer
-    // check for matches with user
+    // THEN check for matches with user
     var masterReturn = false;
     var choiceObj = [1, 2, 3, 4, 5, 6, 7, 8].filter(checkPath.bind(this));
     return masterReturn;
@@ -179,16 +172,16 @@ var Box = React.createClass({
   getLastCorner: function getLastCorner(paths) {
     return paths.map(getPathsCorners.bind(this)).filter(function (a) {
       return a !== undefined;
-    })[0]
-    // only need one ie: the first one
+    })[0] // only need one ie: the first one
     ;
     function getPathsCorners(pId) {
+      var _this = this;
+
       var arr = this.props.appData.pathObj[pId].layout;
-      return arr.filter(firstCorner.bind(this))[0];
+      return arr.filter(function (box) {
+        return _this.isCorner(box);
+      })[0];
       // only need one corner but all are returned
-    }
-    function firstCorner(box) {
-      return this.isCorner(box);
     }
   },
   getOpenCorner: function getOpenCorner() {
@@ -239,33 +232,8 @@ var Box = React.createClass({
   },
   // check if any streaks in various paths function based on paths to check
   // view notes for applicable changes...
-  checkPaths: function checkPaths(arr, event) {
-
-    var set = arr.map(function (pathId) {
-
-      var pathArr = this.state.boardPaths[pathId];
-
-      if (check3InRow(pathArr)) {
-        console.log(pathArr[0].toUpperCase() + "'s Won on path", pathId);
-      }
-
-      return check3InRow(pathArr);
-    });
-    // possible mixin used ...
-    function check3InRow(arr) {
-      var match = true;
-      if (arr.length > 2) {
-        arr.reduce(function (acc, val) {
-          if (acc !== val) {
-            match = false;
-          }
-          return val;
-        });
-      }
-      return match;
-    }
-
-    return set;
+  checkForWinner: function checkForWinner(arr, event) {
+    // check if there is a winner
   },
   render: function render() {
     var s = this.state;

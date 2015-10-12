@@ -84,15 +84,8 @@ let Board = React.createClass({
 });
 
 let Box = React.createClass({
-
   getInitialState: function(){
     return {}
-  },
-  componentDidUpdate: function(a,b) {
-    // did update --- previous props(a), and state(b)
-  },
-  componentWillUpdate: function(a,b) {
-    // will update --- new props(a), and state(b)
   },
   makeMoves: function(userBoxId,event){
     let props = this.props;
@@ -108,7 +101,6 @@ let Box = React.createClass({
         this.markBox(userBoxId,"x","teal-box");
         // make choice for comp
         let boxId = this.computerChoice();
-        console.log(boxId);
         this.markBox(boxId,"o","grey-box")
       }
     }
@@ -130,7 +122,7 @@ let Box = React.createClass({
   },
   twoInRow: function(){
     // check for matches with computer
-    // check for matches with user
+    // THEN check for matches with user
     var masterReturn = false;
     let choiceObj = [1,2,3,4,5,6,7,8].filter(checkPath.bind(this));
     return masterReturn;
@@ -172,16 +164,12 @@ let Box = React.createClass({
   getLastCorner: function(paths) {
     return (
       paths.map( getPathsCorners.bind(this) )
-        .filter( a => a !== undefined )[0]
-        // only need one ie: the first one
+        .filter( a => a !== undefined )[0] // only need one ie: the first one
     )
     function getPathsCorners( pId ){
       let arr = this.props.appData.pathObj[pId].layout;
-      return arr.filter(firstCorner.bind(this))[0]
+      return arr.filter(box => this.isCorner(box))[0]
       // only need one corner but all are returned
-    }
-    function firstCorner(box) {
-      return this.isCorner(box)
     }
   },
   getOpenCorner: function() {
@@ -189,7 +177,6 @@ let Box = React.createClass({
     return this.props.boardState.corners.filter(cner => {
       // return the corner that is not checked
       return boxes.filter(a => a.id === cner)[0].checked === false;
-
     })[0]; // even if multiple open corners, any open one is fine thats why I choose 0 index
   },
   markBox: function(boxId,mark,colorClass){
@@ -223,37 +210,11 @@ let Box = React.createClass({
       // go in open spot
     }
 
-
   },
   // check if any streaks in various paths function based on paths to check
   // view notes for applicable changes...
-  checkPaths: function(arr,event) {
-
-    let set = arr.map(function(pathId){
-
-      let pathArr = this.state.boardPaths[pathId];
-
-      if (check3InRow(pathArr)) {
-        console.log(`${pathArr[0].toUpperCase()}'s Won on path`,pathId)
-      }
-
-      return check3InRow(pathArr);
-    });
-    // possible mixin used ...
-    function check3InRow(arr) {
-      let match = true;
-      if(arr.length > 2 ) {
-        arr.reduce(function(acc,val){
-          if(acc !== val){
-              match = false;
-          }
-          return val;
-        });
-      }
-      return match;
-    }
-
-    return set;
+  checkForWinner: function(arr,event) {
+    // check if there is a winner
   },
   render: function() {
     const s = this.state;

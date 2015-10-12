@@ -112,7 +112,8 @@ header {
           -moz-transform: translate(-50%,-50%);
           -ms-transform: translate(-50%,-50%);
           -o-transform: translate(-50%,-50%);
-          transform: translate(-50%,-50%); }
+          transform: translate(-50%,-50%);
+          -webkit-backface-visibility: hidden; }
           #main #app #board-container .board .inner-board .box {
             display: inline-block;
             width: 33.333%;
@@ -123,7 +124,8 @@ header {
             -ms-transition: opacity .2s ease;
             -o-transition: opacity .2s ease;
             transition: opacity .2s ease;
-            overflow: hidden; }
+            overflow: hidden;
+            -webkit-backface-visibility: hidden; }
             #main #app #board-container .board .inner-board .box .mark-box {
               width: 100%;
               height: 100%;
