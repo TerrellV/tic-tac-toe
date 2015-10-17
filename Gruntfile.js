@@ -5,12 +5,12 @@ module.exports = function(grunt) {
       default_options: {
         files: {
           src: [
-            "build/*"
+            "build/*","*.html"
           ]
         },
         options: {
           watchTask: true,
-          reloadDelay: 2000,
+          reloadDelay: 0,
           server: {
             baseDir: "./"
           }
@@ -19,53 +19,58 @@ module.exports = function(grunt) {
     },
     jade: {
       index: {
-        src: ['dev/*.jade'],
+        src: ['dev/jade/*'],
         dest: 'index.html'
       }
     },
     sass: {
       distrib: {
         files: {
-          'build/build.css':'dev/styles.scss'
+          'build/build.css':'dev/scss/styles.scss'
         }
       }
     },
-    babel:{
+    browserify: {
+      dist: {
         options: {
-            sourceMap: true
+          transform: [
+            [ 'babelify', {loose:'all'} ]
+          ]
         },
-        dist: {
-            files: [
-                {
-                    src: ['dev/app.js'],
-                    dest: 'build/app.jsx.js'
-                }
-            ]
+        files: {
+          'build/bundle.js' : 'dev/scripts/main.js'
         }
+      }
     },
     watch: {
-      indexJade: {
-        files: ['dev/*.jade'],
-        tasks: ['jade:index']
+      js: {
+        files: ['dev/scripts/**'],
+        tasks: ['browserify'],
+        options: {
+          livereload: true
+        }
       },
-      css: {
-        files: ['dev/*.scss'],
+      indexJade: {
+        files: ['dev/jade/*.jade'],
+        tasks: ['jade:index'],
+        options: {
+          livereload: true
+        }
+      },
+      styles: {
+        files: ['dev/scss/*.scss'],
         tasks: ['sass'],
         options: {
           livereload: true
-        },
-      },
-      js: {
-        files: ["dev/app.js"],
-        tasks: ["babel"]
+        }
       }
     }
   });
-  grunt.loadNpmTasks('grunt-eslint');
+  grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-browser-sync');
-  grunt.loadNpmTasks('grunt-babel');
+  // grunt.loadNpmTasks('grunt-babel');
   grunt.loadNpmTasks('grunt-contrib-jade');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.registerTask('default', ['jade', 'sass', 'babel', 'browserSync', 'watch']);
+  grunt.registerTask('default', ['jade', 'sass', 'browserify', 'browserSync', 'watch']);
 };
