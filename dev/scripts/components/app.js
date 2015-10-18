@@ -4,23 +4,34 @@ import {BoardActions} from "../actions/BoardActions.js";
 import {Board} from "./board.js";
 
 let App = React.createClass({
+  getInitialState: function() {
+    return {
+      storeData: this.getStoreData()
+    }
+  },
   componentDidMount: function() {
-    BoardStore.addChangeListener(this._onChange)
+    BoardStore.addChangeListener(this._onMark)
   },
   componentWillUnmount: function() {
-
+    BoardStore.removeChangeListener(this._remove)
+  },
+  getStoreData: function(){
+    return BoardStore.getState();
   },
   render: function(){
     return (
       <div id="app">
         <div id="board-container">
-          <Board/>
+          <Board data={this.state.storeData}/>
         </div>
       </div>
     )
   },
-  _onChange: function(){
-    console.log("i noticed a change")
+  _onMark: function(){
+    this.setState({storeData : this.getStoreData()});
+  },
+  _remove: function(){
+    //
   }
 });
 

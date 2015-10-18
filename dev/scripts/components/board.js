@@ -8,10 +8,15 @@ let Board = React.createClass({
     return {}
   },
   render: function(){
+    let {pathObj,boxes} = this.props.data;
     return (
       <div className="board mdl-shadow--8dp">
         <div className="inner-board">
-          <Box/>
+          {
+            boxes.map(function(bx,i,arr) {
+              return <Box data={this.props.data} boxInfo={bx} key={i}/>
+            }.bind(this))
+          }
         </div>
       </div>
     )

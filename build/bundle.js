@@ -50,10 +50,20 @@ var _boardJs = require("./board.js");
 var App = _react2["default"].createClass({
   displayName: "App",
 
-  componentDidMount: function componentDidMount() {
-    _storesBoardStoreJs.BoardStore.addChangeListener(this._onChange);
+  getInitialState: function getInitialState() {
+    return {
+      storeData: this.getStoreData()
+    };
   },
-  componentWillUnmount: function componentWillUnmount() {},
+  componentDidMount: function componentDidMount() {
+    _storesBoardStoreJs.BoardStore.addChangeListener(this._onMark);
+  },
+  componentWillUnmount: function componentWillUnmount() {
+    _storesBoardStoreJs.BoardStore.removeChangeListener(this._remove);
+  },
+  getStoreData: function getStoreData() {
+    return _storesBoardStoreJs.BoardStore.getState();
+  },
   render: function render() {
     return _react2["default"].createElement(
       "div",
@@ -61,12 +71,15 @@ var App = _react2["default"].createClass({
       _react2["default"].createElement(
         "div",
         { id: "board-container" },
-        _react2["default"].createElement(_boardJs.Board, null)
+        _react2["default"].createElement(_boardJs.Board, { data: this.state.storeData })
       )
     );
   },
-  _onChange: function _onChange() {
-    console.log("i noticed a change");
+  _onMark: function _onMark() {
+    this.setState({ storeData: this.getStoreData() });
+  },
+  _remove: function _remove() {
+    //
   }
 });
 
@@ -96,13 +109,19 @@ var Board = _react2["default"].createClass({
     return {};
   },
   render: function render() {
+    var _props$data = this.props.data;
+    var pathObj = _props$data.pathObj;
+    var boxes = _props$data.boxes;
+
     return _react2["default"].createElement(
       "div",
       { className: "board mdl-shadow--8dp" },
       _react2["default"].createElement(
         "div",
         { className: "inner-board" },
-        _react2["default"].createElement(_boxJs.Box, null)
+        boxes.map((function (bx, i, arr) {
+          return _react2["default"].createElement(_boxJs.Box, { data: this.props.data, boxInfo: bx, key: i });
+        }).bind(this))
       )
     );
   }
@@ -131,11 +150,47 @@ var Box = _react2["default"].createClass({
   getInitialState: function getInitialState() {
     return {};
   },
-  handleClick: function handleClick(action) {},
+  handleClick: function handleClick(data) {
+    if (this.props.boxInfo.checked === false) {
+      // make user choice
+      _actionsBoardActionsJs.BoardActions.makeUserChoice(data);
+      // make computer choice.... move all computer app logic from previous implimentation into the action for computer choice
+    } else {
+        console.error("BOX IS ALREADY CHECKED");
+      }
+  },
   render: function render() {
-    // add a specific class do each box class
-    return _react2["default"].createElement("div", { className: "box",
-      onClick: this.handleClick });
+    // add a specific class to each box
+    var boxInfo = this.props.boxInfo;
+
+    switch (boxInfo.checked) {
+      case true:
+        return _react2["default"].createElement(
+          "div",
+          { className: "box " + boxInfo.id + " " + boxInfo.bgColor,
+            onClick: this.handleClick.bind(this, { boxId: boxInfo.id, mark: "x" }) },
+          _react2["default"].createElement(
+            "div",
+            { className: "mark-box" + " " + boxInfo.markedColorClass },
+            _react2["default"].createElement(
+              "svg",
+              { className: "mark-icon" },
+              _react2["default"].createElement("use", { xlinkHref: "#" + boxInfo.mark + "-mark" })
+            )
+          )
+        );
+      default:
+        return _react2["default"].createElement(
+          "div",
+          { className: "box " + this.props.boxInfo.bgColor,
+            onClick: this.handleClick.bind(this, { boxId: boxInfo.id, mark: "x" }) },
+          _react2["default"].createElement(
+            "h3",
+            null,
+            this.props.key
+          )
+        );
+    }
   }
 });
 
@@ -157,7 +212,6 @@ var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
 var AppDispatcher = _objectAssign2["default"](new _flux.Dispatcher(), {
   handleViewAction: function handleViewAction(action) {
-    console.log('dispatching action to all the stores...');
     this.dispatch({
       source: 'VIEW_ACTION',
       action: action
@@ -219,15 +273,28 @@ var pathObj = {
   "8": { "layout": ["tr", "mm", "bl"], "marks": 0 }
 };
 // info for each box about where it is located and its status
-var boxes = [{ id: "tl", paths: ["1", "4", "7"], bgColor: "dark-box", activeClassColor: undefined, checked: false, mark: undefined }, { id: "tm", paths: ["2", "4"], bgColor: "light-box", activeClassColor: undefined, checked: false, mark: undefined }, { id: "tr", paths: ["3", "4", "8"], bgColor: "dark-box", activeClassColor: undefined, checked: false, mark: undefined }, { id: "ml", paths: ["1", "5"], bgColor: "light-box", activeClassColor: undefined, checked: false, mark: undefined }, { id: "mm", paths: ["2", "5", "7", "8"], bgColor: "dark-box", activeClassColor: undefined, checked: false, mark: undefined }, { id: "mr", paths: ["3", "5"], bgColor: "light-box", activeClassColor: undefined, checked: false, mark: undefined }, { id: "bl", paths: ["1", "6", "8"], bgColor: "dark-box", activeClassColor: undefined, checked: false, mark: undefined }, { id: "bm", paths: ["2", "6"], bgColor: "light-box", activeClassColor: undefined, checked: false, mark: undefined }, { id: "br", paths: ["3", "6", "7"], bgColor: "dark-box", activeClassColor: undefined, checked: false, mark: undefined }];
+var boxes = [{ id: "tl", paths: ["1", "4", "7"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "tm", paths: ["2", "4"], bgColor: "light-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "tr", paths: ["3", "4", "8"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "ml", paths: ["1", "5"], bgColor: "light-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "mm", paths: ["2", "5", "7", "8"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "mr", paths: ["3", "5"], bgColor: "light-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "bl", paths: ["1", "6", "8"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "bm", paths: ["2", "6"], bgColor: "light-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "br", paths: ["3", "6", "7"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }];
 
 var BoardStore = _objectAssign2["default"]({}, _events.EventEmitter.prototype, {
   emitChange: function emitChange() {
     this.emit(CHANGE_EVENT);
   },
   addChangeListener: function addChangeListener(CmpCallBk) {
-    console.log('listening');
     this.on(CHANGE_EVENT, CmpCallBk);
+  },
+  removeChangeListener: function removeChangeListener(callback) {
+    this.removeListener(CHANGE_EVENT, callback);
+  },
+  getState: function getState() {
+    return { pathObj: pathObj, boxes: boxes };
+  },
+  resetStore: function resetStore() {
+    boxes.map(function (obj) {
+      obj.checked = false;
+      obj.mark = undefined;
+      return obj;
+    });
+    console.log("reset");
   }
 });
 
@@ -235,8 +302,21 @@ _dispatcherAppDispatcherJs.AppDispatcher.register(function (payload) {
   var source = payload.source;
   var action = payload.action;
 
-  console.log(action.item);
-  BoardStore.emitChange();
+  switch (action.actionType) {
+    case "makeUserChoice":
+      var box = boxes.filter(function (bx) {
+        return bx.id === action.data.boxId;
+      })[0];
+      box.checked = true;
+      box.mark = action.data.mark;
+      box.markedColorClass = "teal-box";
+      BoardStore.emitChange();
+      break;
+    case "makeCompChoice":
+      break;
+    default:
+      null;
+  }
   return true;
 });
 

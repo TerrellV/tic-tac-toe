@@ -139,11 +139,11 @@ header {
               -ms-transform: translate(-50%,-50%);
               -o-transform: translate(-50%,-50%);
               transform: translate(-50%,-50%);
-              -webkit-animation: fillBox 400ms ease forwards;
-              -moz-animation: fillBox 400ms ease forwards;
-              -ms-animation: fillBox 400ms ease forwards;
-              -o-animation: fillBox 400ms ease forwards;
-              animation: fillBox 400ms ease forwards; }
+              -webkit-animation: fillBox 500ms ease-in-out forwards;
+              -moz-animation: fillBox 500ms ease-in-out forwards;
+              -ms-animation: fillBox 500ms ease-in-out forwards;
+              -o-animation: fillBox 500ms ease-in-out forwards;
+              animation: fillBox 500ms ease-in-out forwards; }
               #main #app #board-container .board .inner-board .box .mark-box .mark-icon {
                 -webkit-box-sizing: border-box;
                 -moz-box-sizing: border-box;

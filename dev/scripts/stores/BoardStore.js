@@ -17,31 +17,55 @@ let pathObj = {
 };
 // info for each box about where it is located and its status
 let boxes = [
-  {id:"tl", paths:["1","4","7"], bgColor:"dark-box", activeClassColor:undefined, checked:false, mark:undefined},
-  {id:"tm", paths:["2","4"], bgColor:"light-box", activeClassColor:undefined, checked:false, mark:undefined},
-  {id:"tr", paths:["3","4","8"], bgColor:"dark-box", activeClassColor:undefined, checked:false, mark:undefined},
-  {id:"ml", paths:["1","5"], bgColor:"light-box", activeClassColor:undefined, checked:false, mark:undefined},
-  {id:"mm", paths:["2","5","7","8"], bgColor:"dark-box", activeClassColor:undefined, checked:false, mark:undefined},
-  {id:"mr", paths:["3","5"], bgColor:"light-box", activeClassColor:undefined, checked:false, mark:undefined},
-  {id:"bl", paths:["1","6","8"], bgColor:"dark-box", activeClassColor:undefined, checked:false, mark:undefined},
-  {id:"bm", paths:["2","6"], bgColor:"light-box", activeClassColor:undefined, checked:false, mark:undefined},
-  {id:"br", paths:["3","6","7"], bgColor:"dark-box", activeClassColor:undefined, checked:false, mark:undefined}
+  {id:"tl", paths:["1","4","7"], bgColor:"dark-box", markedColorClass:undefined, checked:false, mark:undefined},
+  {id:"tm", paths:["2","4"], bgColor:"light-box", markedColorClass:undefined, checked:false, mark:undefined},
+  {id:"tr", paths:["3","4","8"], bgColor:"dark-box", markedColorClass:undefined, checked:false, mark:undefined},
+  {id:"ml", paths:["1","5"], bgColor:"light-box", markedColorClass:undefined, checked:false, mark:undefined},
+  {id:"mm", paths:["2","5","7","8"], bgColor:"dark-box", markedColorClass:undefined, checked:false, mark:undefined},
+  {id:"mr", paths:["3","5"], bgColor:"light-box", markedColorClass:undefined, checked:false, mark:undefined},
+  {id:"bl", paths:["1","6","8"], bgColor:"dark-box", markedColorClass:undefined, checked:false, mark:undefined},
+  {id:"bm", paths:["2","6"], bgColor:"light-box", markedColorClass:undefined, checked:false, mark:undefined},
+  {id:"br", paths:["3","6","7"], bgColor:"dark-box", markedColorClass:undefined, checked:false, mark:undefined}
 ];
+
 
 let BoardStore = assign({}, EventEmitter.prototype, {
   emitChange: function() {
     this.emit(CHANGE_EVENT);
   },
   addChangeListener: function(CmpCallBk) {
-    console.log('listening');
     this.on(CHANGE_EVENT,CmpCallBk);
+  },
+  removeChangeListener: function(callback) {
+    this.removeListener(CHANGE_EVENT,callback)
+  },
+  getState: function() {
+    return { pathObj, boxes}
+  },
+  resetStore: function() {
+    boxes.map( obj => {
+      obj.checked = false;
+      obj.mark = undefined;
+      return obj;
+    });
+    console.log("reset");
   }
 });
 
 AppDispatcher.register(function(payload) {
   let {source,action} = payload;
-  console.log(action.item);
-  BoardStore.emitChange();
+  switch( action.actionType ){
+    case "makeUserChoice" :
+      let box = boxes.filter( bx => bx.id === action.data.boxId)[0];
+      box.checked = true;
+      box.mark = action.data.mark;
+      box.markedColorClass = "teal-box";
+      BoardStore.emitChange();
+      break;
+    case "makeCompChoice":
+      break;
+    default: null;
+  }
   return true;
 });
 

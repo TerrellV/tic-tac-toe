@@ -72,7 +72,7 @@ header{
               fill: white;
               border-radius: 50%;
               @include center-me();
-              @include animation("fillBox 400ms ease forwards");
+              @include animation("fillBox 500ms ease-in-out forwards");
               .mark-icon {
                 @include box-sizing("border-box");
                 @include center-me();
