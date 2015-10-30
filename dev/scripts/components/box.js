@@ -33,7 +33,6 @@ let Box = React.createClass({
         return (
           <div className={"box " + this.props.boxInfo.bgColor}
           onClick={this.handleClick.bind(this,{boxId: boxInfo.id, mark:"x"})}>
-            <h3>{this.props.key}</h3>
           </div>
         );
     }

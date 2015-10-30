@@ -180,16 +180,8 @@ var Box = _react2["default"].createClass({
           )
         );
       default:
-        return _react2["default"].createElement(
-          "div",
-          { className: "box " + this.props.boxInfo.bgColor,
-            onClick: this.handleClick.bind(this, { boxId: boxInfo.id, mark: "x" }) },
-          _react2["default"].createElement(
-            "h3",
-            null,
-            this.props.key
-          )
-        );
+        return _react2["default"].createElement("div", { className: "box " + this.props.boxInfo.bgColor,
+          onClick: this.handleClick.bind(this, { boxId: boxInfo.id, mark: "x" }) });
     }
   }
 });
