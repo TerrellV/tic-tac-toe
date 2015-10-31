@@ -9,7 +9,6 @@ let Box = React.createClass({
   handleClick: function(data){
     if (this.props.boxInfo.checked === false){
 
-      data.storeData = this.props.storeData;
       data.boxInfo = this.props.boxInfo;
 
       BoardActions.makeUserChoice(data);

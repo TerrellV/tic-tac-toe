@@ -4,7 +4,9 @@ import assign from "object-assign";
 
 const CHANGE_EVENT = "change";
 
-// info for each path about the boxes inside and general status
+/*///////////////////////////////
+  private store values
+ ///////////////////////////////*/
 let pathObj = {
   "1": {"layout": ["tl","ml","bl"], "marks": 0 },
   "2": {"layout": ["tm","mm","bm"], "marks": 0 },
@@ -15,7 +17,6 @@ let pathObj = {
   "7": {"layout": ["tl","mm","br"], "marks": 0 },
   "8": {"layout": ["tr","mm","bl"], "marks": 0 }
 };
-// info for each box about where it is located and its status
 let boxes = [
   {id:"tl", paths:["1","4","7"], bgColor:"dark-box", markedColorClass:undefined, checked:false, mark:undefined},
   {id:"tm", paths:["2","4"], bgColor:"light-box", markedColorClass:undefined, checked:false, mark:undefined},
@@ -33,8 +34,149 @@ let gameSigns = {
 }
 let corners = ["tl","tr","bl","br"];
 let middleEdges = ["tm","ml","mr","bm"];
-let firstMove = true;
 
+/* ALL COMPUTER LOGIC PSEUDO CODE
+
+  * if first move check..
+    * if user picks corner - pick middle
+    * else pick the first corner in paths
+  * Switch Check if there are two of the same marks in any paths (ignore full paths)
+  * case if computer can win then make the winning move
+  * case if user can win, make the defensive move
+  * case if no winning spot
+    * switch who holds the middle spot
+      * case if nobody holds middle go middle
+      * case if user holds middle go corner
+      * case if comp holds middle go non corner
+*/
+
+
+/*///////////////////////////////
+  logic function that returns the computers move
+ ///////////////////////////////*/
+
+function computerLogic(payload){
+  let {source,action} = payload;
+  let {actionType,data} = action;
+
+  let evalBoard = evaluateForTwoInPath();
+
+  switch( evalBoard.moveType ){
+    case "computerWin":
+      return evalBoard.move;
+    case "blockUser":
+      return evalBoard.move;
+    case "CheckMiddle":
+      switch(boxes.filter( box => box.id === "mm")[0].mark) {
+        case gameSigns.comp:
+          return getOpenEdge() || getOpenCorner();
+        case gameSigns.user:
+          return getOpenCorner() || getOpenEdge();
+        default:
+          return "mm";
+      };
+      break;
+    default: console.error("Fell Through Switch Logic");;
+  }
+}
+
+/*///////////////////////////////
+  functions for updating store's state
+ ///////////////////////////////*/
+
+function updateUserPick(payload){
+  let {source,action} = payload;
+  let {actionType, data} = action;
+
+  let box = boxes.filter( bx => bx.id === data.boxId)[0];
+  box.checked = true;
+  box.mark = gameSigns.user;
+  box.markedColorClass = "teal-box";
+  addOneToMarkCountForEachPath(box);
+}
+function updateComputerPick(boxToMark){
+  let boxObj = boxes.filter( bx => bx.id === boxToMark)[0];
+  boxObj.checked = true;
+  boxObj.mark = gameSigns.comp;
+  boxObj.markedColorClass = "grey-box";
+  addOneToMarkCountForEachPath(boxObj);
+}
+function addOneToMarkCountForEachPath(boxObj) {
+  boxObj.paths.map( path => { pathObj[path].marks++ } )
+}
+function resetStore(){
+  console.log('_________starting reset');
+  boxes.map( obj => {
+    obj.checked = false;
+    obj.mark = undefined;
+    return obj;
+  });
+  Object.keys(pathObj).map( path => {pathObj[path].marks = 0});
+  console.log("finished reset");
+}
+
+/*///////////////////////////////
+  accessory functions
+ ///////////////////////////////*/
+
+function getFirstCorner(paths) {
+  return (
+    paths.map( getPathsCorners.bind(this) )
+      .filter( a => a !== undefined )[0] // only need one ie: the first one
+  )
+  function getPathsCorners( pId ){
+    let arr = pathObj[pId].layout;
+    return arr.filter( box => corners.indexOf(box) !== -1 )[0]
+    // only need one corner but all are returned
+  }
+}
+function evaluateForTwoInPath() {
+
+  let checkComp = check4Two(gameSigns.comp);
+  let checkUser = check4Two(gameSigns.user);
+
+  if (checkComp) { return {moveType: "computerWin", move: checkComp} }
+  else if(checkUser) { return {moveType: "blockUser", move: checkUser} }
+
+  return {moveType: "CheckMiddle"};
+
+  function check4Two(mark){
+    let paths = Object.keys(pathObj);
+    let solutionBox = paths.map( (path,i,arr)  => {
+      if (pathObj[path].marks < 3){
+        let boxesToCheck = pathObj[path].layout;
+
+        // filter boxes that match the mark being tested
+        let matches = boxesToCheck.filter( (boxId,i,arr) => {
+          let boxObj = boxes.filter( box => box.id === boxId)[0];
+          return boxObj.mark === mark;
+        });
+
+        if (matches.length > 1) {
+          return boxesToCheck.filter( box => matches.indexOf(box) === -1 )[0];
+        }
+      }
+    }).filter( id => id !== undefined )[0];
+
+    return solutionBox;
+  }
+}
+function getOpenCorner(){
+  return corners.filter( box => {
+    return boxes.filter( a => a.id === box )[0].mark === undefined
+  })[0];
+}
+function getOpenEdge(){
+  return middleEdges.filter(box => {
+     return boxes.filter( a => a.id === box )[0].mark === undefined
+  })[0];
+}
+
+
+
+/*///////////////////////////////
+  board store to be exported
+ ///////////////////////////////*/
 
 let BoardStore = assign({}, EventEmitter.prototype, {
   emitChange: function() {
@@ -47,46 +189,33 @@ let BoardStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT,callback)
   },
   getState: function() {
-    return { pathObj, boxes, corners, middleEdges, firstMove, gameSigns}
-  },
-  resetStore: function() {
-    boxes.map( obj => {
-      obj.checked = false;
-      obj.mark = undefined;
-      return obj;
-    });
-    console.log("reset");
+    return { pathObj, boxes, corners, middleEdges, gameSigns}
   }
 });
 
+
+/*///////////////////////////////
+  register the store with dispatcher
+  determine action based on action recieved
+ ///////////////////////////////*/
+
 AppDispatcher.register(function(payload) {
-  let {source,action} = payload;
-  let data = action.data;
-  switch( action.actionType ){
+  switch( payload.action.actionType ){
     case "makeUserChoice" :
-      let box = boxes.filter( bx => bx.id === data.boxId)[0];
-      box.checked = true;
-      box.mark = gameSigns.user;
-      box.markedColorClass = "teal-box";
-      addOneToMarkCountForEachPath(box);
+      updateUserPick(payload);
       BoardStore.emitChange();
       break;
     case "makeComputerChoice":
-      let boxToMarkObj = boxes.filter( bx => bx.id === data.boxToMark)[0];
-      boxToMarkObj.checked = true;
-      boxToMarkObj.mark = gameSigns.comp;
-      boxToMarkObj.markedColorClass = "grey-box";
-      firstMove = data.storeData.firstMove;
-      addOneToMarkCountForEachPath(boxToMarkObj);
+      let compChoice = computerLogic(payload);
+      updateComputerPick(compChoice);
       BoardStore.emitChange();
       break;
-    default: console.log("Action not recognized");
+    case "resetBoard":
+      resetStore();
+      BoardStore.emitChange();
+      break;
+    default: console.log("Action not recognized by BoardStore");
   }
-
-  function addOneToMarkCountForEachPath(boxObj) {
-    boxObj.paths.map( path => { pathObj[path].marks++ } )
-  }
-
 
   return true;
 });
