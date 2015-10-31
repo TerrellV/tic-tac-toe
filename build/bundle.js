@@ -5,6 +5,8 @@ exports.__esModule = true;
 
 var _dispatcherAppDispatcherJs = require("../dispatcher/app-dispatcher.js");
 
+var _storesBoardStoreJs = require("../stores/BoardStore.js");
+
 // import constants Here to use for names of actions. Havent added them yet
 
 var BoardActions = {
@@ -18,8 +20,146 @@ var BoardActions = {
     });
   },
   makeComputerChoice: function makeComputerChoice(data) {
+    // manipulate data here and pass final compChoice to stores..
 
-    // manipulate data here and pass compChoice to stores..
+    /* ALL COMPUTER LOGIC Explained
+        * if first move check..
+        * if user picks corner - pick middle
+        * else pick the first corner in paths
+      * else if computer can win then make the winning move
+      * else if user can win, make the defensive move
+      * else if nowinning spot
+        * if nobody holds middle go middle
+        * if user holds middle go corner
+        * if comp holds middle go non corner
+      */
+
+    var storeData = data.storeData;
+    var boxInfo = data.boxInfo;
+
+    if (storeData.firstMove) {
+      storeData.firstMove = false;
+
+      if (isCorner(data.boxId)) {
+        console.log('corner clicked setting boxToMark to mm');
+        data.boxToMark = "mm";
+      } else {
+        data.boxToMark = getFirstCorner(boxInfo.paths);
+      }
+    } else {
+      var winningCheck = ifTwoReturnWinningSpot(storeData.gameSigns.comp);
+      if (winningCheck !== undefined) {
+        data.boxToMark = winningCheck;
+      } else {
+        var defenseCheck = ifTwoReturnWinningSpot(storeData.gameSigns.user);
+        if (defenseCheck !== undefined) {
+          data.boxToMark = defenseCheck;
+        } else {
+          console.log('checking middle switch');
+          switch (storeData.boxes.filter(function (box) {
+            return box.id === "mm";
+          })[0].mark) {
+            case storeData.gameSigns.user:
+              console.log('user is in middle');
+              console.log(getOpenCorner());
+              data.boxToMark = !getOpenCorner() ? getOpenEdge() : getOpenCorner();
+              console.log(getOpenEdge());
+              break;
+            case storeData.gameSigns.comp:
+              console.log("go in open edge");
+              data.boxToMark = getOpenEdge();
+              break;
+            default:
+              console.log('defaulting');
+              data.boxToMark = "mm";
+          }
+        }
+      }
+    }
+
+    function firstCompMove(userPickBoxId) {
+      var markDelay = window.setTimeout(makeMove.bind(this), 500);
+      function makeMove() {
+        var props = this.props;
+        var myBoxInfo = props.boxInfo;
+
+        if (this.isCorner(userPickBoxId)) {
+          this.markBox("mm", "o", "grey-box");
+        } else {
+          var corner = this.getLastCorner(myBoxInfo.paths);
+          this.markBox(corner, "o", "grey-box");
+        }
+        this.props.update({ firstMove: false });
+      }
+    };
+    function isCorner(ClickedBox) {
+      return data.storeData.corners.indexOf(ClickedBox) > -1 ? true : false;
+    }
+    function getFirstCorner(paths) {
+      return paths.map(getPathsCorners.bind(this)).filter(function (a) {
+        return a !== undefined;
+      })[0] // only need one ie: the first one
+      ;
+      function getPathsCorners(pId) {
+        var arr = data.storeData.pathObj[pId].layout;
+        return arr.filter(function (box) {
+          return isCorner(box);
+        })[0];
+        // only need one corner but all are returned
+      }
+    }
+    function getOpenEdge() {
+      return storeData.middleEdges.filter(function (box) {
+        return storeData.boxes.filter(function (a) {
+          return a.id === box;
+        })[0].mark === undefined;
+      })[0];
+    }
+    function getOpenCorner() {
+      return storeData.corners.filter(function (box) {
+        return storeData.boxes.filter(function (a) {
+          return a.id === box;
+        })[0].mark === undefined;
+      })[0];
+    }
+    function ifTwoReturnWinningSpot(mark) {
+      var _data$storeData = data.storeData;
+      var boxes = _data$storeData.boxes;
+      var pathObj = _data$storeData.pathObj;
+
+      var paths = Object.keys(pathObj);
+
+      // check each path
+      var test = paths.map(function (path, i, arr) {
+        // if less than three marks in path check it
+        if (pathObj[path].marks < 3) {
+          var _ret = (function () {
+            var boxesToCheck = pathObj[path].layout;
+
+            // filter boxes that match the mark being tested
+            var matches = boxesToCheck.filter(function (boxId, i, arr) {
+              var boxObj = boxes.filter(function (box) {
+                return box.id === boxId;
+              })[0];
+              return boxObj.mark === mark;
+            });
+
+            if (matches.length > 1) {
+              return {
+                v: boxesToCheck.filter(function (box) {
+                  return matches.indexOf(box) === -1;
+                })[0]
+              };
+            }
+          })();
+
+          if (typeof _ret === "object") return _ret.v;
+        }
+      }).filter(function (id) {
+        return id !== undefined;
+      })[0];
+      return test;
+    }
 
     _dispatcherAppDispatcherJs.AppDispatcher.handleViewAction({
       actionType: "makeComputerChoice",
@@ -30,7 +170,7 @@ var BoardActions = {
 
 exports.BoardActions = BoardActions;
 
-},{"../dispatcher/app-dispatcher.js":5}],2:[function(require,module,exports){
+},{"../dispatcher/app-dispatcher.js":5,"../stores/BoardStore.js":7}],2:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -71,7 +211,7 @@ var App = _react2["default"].createClass({
       _react2["default"].createElement(
         "div",
         { id: "board-container" },
-        _react2["default"].createElement(_boardJs.Board, { data: this.state.storeData })
+        _react2["default"].createElement(_boardJs.Board, { storeData: this.state.storeData })
       )
     );
   },
@@ -109,9 +249,9 @@ var Board = _react2["default"].createClass({
     return {};
   },
   render: function render() {
-    var _props$data = this.props.data;
-    var pathObj = _props$data.pathObj;
-    var boxes = _props$data.boxes;
+    var _props$storeData = this.props.storeData;
+    var pathObj = _props$storeData.pathObj;
+    var boxes = _props$storeData.boxes;
 
     return _react2["default"].createElement(
       "div",
@@ -120,7 +260,7 @@ var Board = _react2["default"].createClass({
         "div",
         { className: "inner-board" },
         boxes.map((function (bx, i, arr) {
-          return _react2["default"].createElement(_boxJs.Box, { data: this.props.data, boxInfo: bx, key: i });
+          return _react2["default"].createElement(_boxJs.Box, { storeData: this.props.storeData, boxInfo: bx, key: i });
         }).bind(this))
       )
     );
@@ -152,12 +292,15 @@ var Box = _react2["default"].createClass({
   },
   handleClick: function handleClick(data) {
     if (this.props.boxInfo.checked === false) {
-      // make user choice
+
+      data.storeData = this.props.storeData;
+      data.boxInfo = this.props.boxInfo;
+
       _actionsBoardActionsJs.BoardActions.makeUserChoice(data);
-      // make computer choice.... move all computer app logic from previous implimentation into the action for computer choice
+      _actionsBoardActionsJs.BoardActions.makeComputerChoice(data);
     } else {
-        console.error("BOX IS ALREADY CHECKED");
-      }
+      console.error("BOX IS ALREADY CHECKED");
+    }
   },
   render: function render() {
     // add a specific class to each box
@@ -168,7 +311,7 @@ var Box = _react2["default"].createClass({
         return _react2["default"].createElement(
           "div",
           { className: "box " + boxInfo.id + " " + boxInfo.bgColor,
-            onClick: this.handleClick.bind(this, { boxId: boxInfo.id, mark: "x" }) },
+            onClick: this.handleClick.bind(this, { boxId: boxInfo.id }) },
           _react2["default"].createElement(
             "div",
             { className: "mark-box" + " " + boxInfo.markedColorClass },
@@ -181,7 +324,7 @@ var Box = _react2["default"].createClass({
         );
       default:
         return _react2["default"].createElement("div", { className: "box " + this.props.boxInfo.bgColor,
-          onClick: this.handleClick.bind(this, { boxId: boxInfo.id, mark: "x" }) });
+          onClick: this.handleClick.bind(this, { boxId: boxInfo.id }) });
     }
   }
 });
@@ -266,6 +409,13 @@ var pathObj = {
 };
 // info for each box about where it is located and its status
 var boxes = [{ id: "tl", paths: ["1", "4", "7"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "tm", paths: ["2", "4"], bgColor: "light-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "tr", paths: ["3", "4", "8"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "ml", paths: ["1", "5"], bgColor: "light-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "mm", paths: ["2", "5", "7", "8"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "mr", paths: ["3", "5"], bgColor: "light-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "bl", paths: ["1", "6", "8"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "bm", paths: ["2", "6"], bgColor: "light-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "br", paths: ["3", "6", "7"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }];
+var gameSigns = {
+  user: "x",
+  comp: "o"
+};
+var corners = ["tl", "tr", "bl", "br"];
+var middleEdges = ["tm", "ml", "mr", "bm"];
+var firstMove = true;
 
 var BoardStore = _objectAssign2["default"]({}, _events.EventEmitter.prototype, {
   emitChange: function emitChange() {
@@ -278,7 +428,7 @@ var BoardStore = _objectAssign2["default"]({}, _events.EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
   getState: function getState() {
-    return { pathObj: pathObj, boxes: boxes };
+    return { pathObj: pathObj, boxes: boxes, corners: corners, middleEdges: middleEdges, firstMove: firstMove, gameSigns: gameSigns };
   },
   resetStore: function resetStore() {
     boxes.map(function (obj) {
@@ -294,21 +444,39 @@ _dispatcherAppDispatcherJs.AppDispatcher.register(function (payload) {
   var source = payload.source;
   var action = payload.action;
 
+  var data = action.data;
   switch (action.actionType) {
     case "makeUserChoice":
       var box = boxes.filter(function (bx) {
-        return bx.id === action.data.boxId;
+        return bx.id === data.boxId;
       })[0];
       box.checked = true;
-      box.mark = action.data.mark;
+      box.mark = gameSigns.user;
       box.markedColorClass = "teal-box";
+      addOneToMarkCountForEachPath(box);
       BoardStore.emitChange();
       break;
-    case "makeCompChoice":
+    case "makeComputerChoice":
+      var boxToMarkObj = boxes.filter(function (bx) {
+        return bx.id === data.boxToMark;
+      })[0];
+      boxToMarkObj.checked = true;
+      boxToMarkObj.mark = gameSigns.comp;
+      boxToMarkObj.markedColorClass = "grey-box";
+      firstMove = data.storeData.firstMove;
+      addOneToMarkCountForEachPath(boxToMarkObj);
+      BoardStore.emitChange();
       break;
     default:
-      null;
+      console.log("Action not recognized");
   }
+
+  function addOneToMarkCountForEachPath(boxObj) {
+    boxObj.paths.map(function (path) {
+      pathObj[path].marks++;
+    });
+  }
+
   return true;
 });
 

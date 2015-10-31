@@ -22,7 +22,7 @@ let App = React.createClass({
     return (
       <div id="app">
         <div id="board-container">
-          <Board data={this.state.storeData}/>
+          <Board storeData={this.state.storeData}/>
         </div>
       </div>
     )

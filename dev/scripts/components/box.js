@@ -8,9 +8,13 @@ let Box = React.createClass({
   },
   handleClick: function(data){
     if (this.props.boxInfo.checked === false){
-      // make user choice
+
+      data.storeData = this.props.storeData;
+      data.boxInfo = this.props.boxInfo;
+
       BoardActions.makeUserChoice(data);
-      // make computer choice.... move all computer app logic from previous implimentation into the action for computer choice
+      BoardActions.makeComputerChoice(data);
+
     } else {console.error("BOX IS ALREADY CHECKED")}
   },
   render: function(){
@@ -21,7 +25,7 @@ let Box = React.createClass({
       case true:
       return (
         <div className={"box "+boxInfo.id+" "+boxInfo.bgColor}
-        onClick={this.handleClick.bind(this,{boxId: boxInfo.id, mark:"x"})}>
+        onClick={this.handleClick.bind(this,{boxId: boxInfo.id})}>
           <div className={"mark-box" + " " + boxInfo.markedColorClass}>
             <svg className="mark-icon">
               <use xlinkHref={"#"+boxInfo.mark+"-mark"}></use>
@@ -32,7 +36,7 @@ let Box = React.createClass({
       default:
         return (
           <div className={"box " + this.props.boxInfo.bgColor}
-          onClick={this.handleClick.bind(this,{boxId: boxInfo.id, mark:"x"})}>
+          onClick={this.handleClick.bind(this,{boxId: boxInfo.id})}>
           </div>
         );
     }

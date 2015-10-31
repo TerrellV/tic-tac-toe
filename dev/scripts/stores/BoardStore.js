@@ -27,6 +27,13 @@ let boxes = [
   {id:"bm", paths:["2","6"], bgColor:"light-box", markedColorClass:undefined, checked:false, mark:undefined},
   {id:"br", paths:["3","6","7"], bgColor:"dark-box", markedColorClass:undefined, checked:false, mark:undefined}
 ];
+let gameSigns = {
+  user: "x",
+  comp: "o"
+}
+let corners = ["tl","tr","bl","br"];
+let middleEdges = ["tm","ml","mr","bm"];
+let firstMove = true;
 
 
 let BoardStore = assign({}, EventEmitter.prototype, {
@@ -40,7 +47,7 @@ let BoardStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT,callback)
   },
   getState: function() {
-    return { pathObj, boxes}
+    return { pathObj, boxes, corners, middleEdges, firstMove, gameSigns}
   },
   resetStore: function() {
     boxes.map( obj => {
@@ -54,18 +61,33 @@ let BoardStore = assign({}, EventEmitter.prototype, {
 
 AppDispatcher.register(function(payload) {
   let {source,action} = payload;
+  let data = action.data;
   switch( action.actionType ){
     case "makeUserChoice" :
-      let box = boxes.filter( bx => bx.id === action.data.boxId)[0];
+      let box = boxes.filter( bx => bx.id === data.boxId)[0];
       box.checked = true;
-      box.mark = action.data.mark;
+      box.mark = gameSigns.user;
       box.markedColorClass = "teal-box";
+      addOneToMarkCountForEachPath(box);
       BoardStore.emitChange();
       break;
-    case "makeCompChoice":
+    case "makeComputerChoice":
+      let boxToMarkObj = boxes.filter( bx => bx.id === data.boxToMark)[0];
+      boxToMarkObj.checked = true;
+      boxToMarkObj.mark = gameSigns.comp;
+      boxToMarkObj.markedColorClass = "grey-box";
+      firstMove = data.storeData.firstMove;
+      addOneToMarkCountForEachPath(boxToMarkObj);
+      BoardStore.emitChange();
       break;
-    default: null;
+    default: console.log("Action not recognized");
   }
+
+  function addOneToMarkCountForEachPath(boxObj) {
+    boxObj.paths.map( path => { pathObj[path].marks++ } )
+  }
+
+
   return true;
 });
 
