@@ -47,7 +47,7 @@
   padding: 0px; }
 
 body {
-  background-color: #EEEEEE; }
+  background-color: white; }
 
 header {
   height: 10vh;
@@ -63,7 +63,7 @@ header {
     display: inline-block;
     margin: 0;
     font-family: "Roboto",sans-serif;
-    font-size: 3em; }
+    font-size: 1.5em; }
 
 #main {
   height: 90vh;
@@ -92,8 +92,10 @@ header {
         -ms-transform: translate(-50%,-50%);
         -o-transform: translate(-50%,-50%);
         transform: translate(-50%,-50%);
-        width: 80vw;
-        height: 90vw;
+        width: 50vh;
+        max-width: 90vw;
+        height: 50vh;
+        max-height: 90vw;
         font-size: 0px !important;
         line-height: 0px;
         overflow: hidden;
@@ -128,7 +130,7 @@ header {
             -webkit-backface-visibility: hidden; }
             #main #app #board-container .board .inner-board .box .mark-box {
               width: 100%;
-              height: 100%;
+              height: 110%;
               fill: white;
               border-radius: 50%;
               position: absolute;
@@ -169,17 +171,18 @@ header {
       width: 100%;
       background-color: #58606B;
       height: 10vh;
-      text-align: center; }
+      text-align: center;
+      outline: none;
+      border: none; }
       #main #app #reset-btn #reset-btn-text {
-        outline: none;
-        border: none;
         color: white;
-        font-size: 3em;
+        font-size: 1.25em;
         font-family: "Roboto",sans-serif;
         font-weight: 300;
         line-height: 10vh;
         display: inline-block;
-        letter-spacing: 1px; }
+        letter-spacing: 1px;
+        margin-bottom: 0; }
 
 .dark-box {
   background-color: #e7e7e7; }
@@ -192,5 +195,18 @@ header {
 
 .grey-box {
   background-color: #58606B; }
+
+@media screen and (max-width: 800px) and (min-width: 500px) {
+  header h1 {
+    font-size: 2em; }
+
+  #main #app #reset-btn #reset-btn-text {
+    font-size: 2.25em; } }
+@media screen and (min-width: 801px) {
+  header h1 {
+    font-size: 3em; }
+
+  #main #app #reset-btn #reset-btn-text {
+    font-size: 2.55em; } }
 
 /*# sourceMappingURL=build.css.map */

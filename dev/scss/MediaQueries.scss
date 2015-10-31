@@ -1,0 +1,58 @@
+@media screen and (max-width: 800px) and (min-width: 500px){
+
+  header{
+    h1 {
+      font-size: 2em;
+    }
+  }
+  #main {
+    #app {
+      #board-container{
+        .board{
+          .inner-board {
+            .box {
+              .mark-box {
+                .mark-icon {
+                }
+              }
+            }
+          }
+        }
+      }
+      #reset-btn {
+        #reset-btn-text {
+          font-size: 2.25em
+        }
+      }
+    }
+  }
+}
+@media screen and (min-width: 801px){
+
+  header{
+    h1 {
+      font-size: 3em;
+    }
+  }
+  #main {
+    #app {
+      #board-container{
+        .board{
+          .inner-board {
+            .box {
+              .mark-box {
+                .mark-icon {
+                }
+              }
+            }
+          }
+        }
+      }
+      #reset-btn {
+        #reset-btn-text {
+          font-size: 2.55em
+        }
+      }
+    }
+  }
+}
