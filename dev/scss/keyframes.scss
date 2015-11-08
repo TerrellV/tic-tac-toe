@@ -25,3 +25,18 @@
     @include transform("translate(-50%,-50%) scale(1.5,1.4)");
   };
 }
+
+@keyframes show-results{
+  0%{
+    @include transform("translate(-50%,-50%) scale(0)")
+  };
+  100%{
+    @include transform("translate(-50%,-50%) scale(1.5)");
+  }
+}
+// not working yet
+@keyframes animate-winning-row{
+  0%{ background-color: yellow;};
+  50%{ background-color: pink;};
+  100%{ background-color: $dark;}
+}

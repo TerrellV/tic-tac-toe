@@ -34,6 +34,8 @@ let gameSigns = {
 }
 let corners = ["tl","tr","bl","br"];
 let middleEdges = ["tm","ml","mr","bm"];
+let showingResults = false;
+let boardToShow = "board";
 
 /* ALL COMPUTER LOGIC PSEUDO CODE
 
@@ -105,15 +107,45 @@ function addOneToMarkCountForEachPath(boxObj) {
   boxObj.paths.map( path => { pathObj[path].marks++ } )
 }
 function resetStore(){
-  console.log('_________starting reset');
+  boardToShow = "board";
   boxes.map( obj => {
     obj.checked = false;
     obj.mark = undefined;
     return obj;
   });
   Object.keys(pathObj).map( path => {pathObj[path].marks = 0});
-  console.log("finished reset");
 }
+function showWinningBoxes(row,resolve,reject){
+  if (row) {
+    window.setTimeout( a => {
+      boardToShow = "results";
+      resolve(boardToShow);
+    },2000);
+    pathObj[row].layout.map(box => { getBoxObj(box).markedColorClass = "highlight-box"})
+  } else {
+    reject("No winner")
+  }
+}
+function toggleResults(){
+  boardToShow = "results";
+}
+
+/*///////////////////////////////
+  function for checking the state
+ ///////////////////////////////*/
+
+function checkForWinner(){
+  let isStreak = Object.keys(pathObj).map( path => {
+    if (pathObj[path].marks === 3 ) {
+      let test = pathObj[path].layout.map( box => getBoxObj(box).mark)
+        .reduce( (acc,a) => acc === a ? a : false );
+      return test === "o" || test === "x"? path : undefined
+    }
+  }).filter( val => val !== undefined)[0];
+
+  return isStreak || false;
+}
+
 
 /*///////////////////////////////
   accessory functions
@@ -171,7 +203,9 @@ function getOpenEdge(){
      return boxes.filter( a => a.id === box )[0].mark === undefined
   })[0];
 }
-
+function getBoxObj(id){
+  return boxes.filter( box => box.id === id)[0]
+}
 
 
 /*///////////////////////////////
@@ -189,7 +223,7 @@ let BoardStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT,callback)
   },
   getState: function() {
-    return { pathObj, boxes, corners, middleEdges, gameSigns}
+    return { pathObj, boxes, corners, middleEdges, gameSigns, showingResults, boardToShow}
   }
 });
 
@@ -204,17 +238,31 @@ AppDispatcher.register(function(payload) {
     case "makeUserChoice" :
       updateUserPick(payload);
       BoardStore.emitChange();
+      let p1 = new Promise( showWinningBoxes.bind(this,checkForWinner()));
+      BoardStore.emitChange(); // emitting for purpose of highlights
+      p1.then( result => {
+        BoardStore.emitChange();
+      }, error => {
+        console.log(error)
+      });
       break;
     case "makeComputerChoice":
       let compChoice = computerLogic(payload);
       updateComputerPick(compChoice);
-      BoardStore.emitChange();
+      let p2 = new Promise( showWinningBoxes.bind(this,checkForWinner()));
+      BoardStore.emitChange(); // emitting for purpose of highlights
+      p2.then( result => {
+        BoardStore.emitChange();
+      }, error => {
+        console.log(error)
+      });
       break;
     case "resetBoard":
       resetStore();
+      showingResults = false;
       BoardStore.emitChange();
       break;
-    default: console.log("Action not recognized by BoardStore");
+    default: console.log("Action not recognized by BoardStore or logic fell through");
   }
 
   return true;

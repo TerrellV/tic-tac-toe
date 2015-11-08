@@ -40,9 +40,37 @@ header{
       width: 100%;
       position: relative;
       height: 80vh;
-      box-sizing: inherit;
+      .result-container {
+        position: relative;
+        left: 50%;
+        top: 50%;
+        z-index: 1;
+        width: 50vh;
+        max-width: 90vw;
+        height: 50.5vh;
+        max-height: 90vw;
+        overflow: hidden;
+        @include transform("translate(-50%,-50%)");
+        &.hide {
+          opacity: 0;
+          display: none;
+        }
+        .result-modal{
+          @include center-me();
+          background-color: $red;
+          width: 50vh;
+          max-width: 90vw;
+          height: 50vh;
+          max-height: 90vw;
+          border-radius: 50%;
+          @include animation("show-results 1s ease-in-out both");
+          // animation name duration timing-function delay iteration count, direction, fill-mode
+        }
+      }
       .board{
-        @include center-me();
+        position: absolute;
+        left: 50%;
+        top: 50%;
         width: 50vh;
         max-width: 90vw;
         height: 50vh;
@@ -51,6 +79,16 @@ header{
         line-height: 0px;
         overflow: hidden;
         -webkit-backface-visibility: hidden;
+        @include transition("all 1s ease");
+        @include transform("translate(-50%,-50%) scale(1)");
+        &.results {
+          // this is for the results board
+          @include transform("translate(-50%,-50%) scale(.5)");
+          border-radius: 50%;
+        }
+        &.start {
+          // this is for the start board
+        }
         .inner-board {
           width: 101%;
           height: 101%;
@@ -88,16 +126,19 @@ header{
       }
     }
     #reset-btn {
+      background-color: transparent;
       position: absolute;
       bottom: 0px;
-      width: 100%;
-      background-color: $grey;
+      width: 40%;
       height: 10vh;
       text-align: center;
       outline: none;
-      border: none;
+      border: 2px solid $teal;
+      z-index: 2;
+      border-radius: 100px;
+      @include center-me-horiz();
       #reset-btn-text {
-        color: white;
+        color: $teal;
         font-size: 1.25em;
         font-family: "Roboto",sans-serif;
         font-weight: 300;
@@ -110,17 +151,25 @@ header{
   }
 }
 
+// checkered starting colors
 .dark-box {
   background-color: $dark-box;
 }
 .light-box {
   background-color: $light-box;
 }
+
+// when user clicks
 .teal-box {
   background-color: $teal;
 }
 .grey-box {
   background-color: $grey;
+}
+// for showing winner
+.highlight-box {
+  background-color: $dark;
+  @include transition("all 1s ease");
 }
 
 @import "MediaQueries"

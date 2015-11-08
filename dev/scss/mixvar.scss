@@ -2,6 +2,7 @@ $dark: #222831;
 $grey: #58606B;
 $teal: #00ADB5;
 $white: #EEEEEE;
+$red: #EB586F;
 
 $light-box: #F4F4F4;
 $dark-box: darken($light-box,5%);
@@ -12,11 +13,11 @@ $dark-box: darken($light-box,5%);
   box-sizing: #{$str};
 }
 @mixin animation( $str ) {
-  -webkit-animation: #{$str};
-  -moz-animation: #{$str};
-  -ms-animation: #{$str};
-  -o-animation: #{$str};
-  animation: #{$str};
+  -webkit-animation: #{$str}!important;
+  -moz-animation: #{$str}!important;
+  -ms-animation: #{$str}!important;
+  -o-animation: #{$str}!important;
+  animation: #{$str}!important;
 }
 @mixin transition( $str ) {
   -webkit-transition: #{$str};
