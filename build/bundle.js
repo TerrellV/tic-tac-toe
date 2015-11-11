@@ -10,6 +10,12 @@ var _storesBoardStoreJs = require("../stores/BoardStore.js");
 // import constants Here to use for names of actions. Havent added them yet
 
 var BoardActions = {
+  assignMarks: function assignMarks(data) {
+    _dispatcherAppDispatcherJs.AppDispatcher.handleViewAction({
+      actionType: "assignMarks",
+      data: data
+    });
+  },
   makeUserChoice: function makeUserChoice(data) {
     _dispatcherAppDispatcherJs.AppDispatcher.handleViewAction({
       actionType: "makeUserChoice",
@@ -117,26 +123,18 @@ var Board = _react2["default"].createClass({
   getInitialState: function getInitialState() {
     return {};
   },
+  handleClick: function handleClick(info) {
+    _actionsBoardActionsJs.BoardActions.assignMarks(info);
+  },
   render: function render() {
     var _props$storeData = this.props.storeData;
     var pathObj = _props$storeData.pathObj;
     var boxes = _props$storeData.boxes;
     var boardToShow = _props$storeData.boardToShow;
+    var gameSigns = _props$storeData.gameSigns;
 
+    var activeStatus = gameSigns.user === 'x' ? "x-active" : "o-active";
     switch (boardToShow) {
-      case "start":
-        return _react2["default"].createElement(
-          "div",
-          { className: "board start mdl-shadow--8dp" },
-          _react2["default"].createElement(
-            "div",
-            { className: "inner-board" },
-            boxes.map((function (bx, i, arr) {
-              return _react2["default"].createElement(_boxJs.Box, { storeData: this.props.storeData, boxInfo: bx, key: i });
-            }).bind(this))
-          )
-        );
-        break;
       case "board":
         return _react2["default"].createElement(
           "div",
@@ -147,6 +145,43 @@ var Board = _react2["default"].createClass({
             boxes.map((function (bx, i, arr) {
               return _react2["default"].createElement(_boxJs.Box, { storeData: this.props.storeData, boxInfo: bx, key: i });
             }).bind(this))
+          )
+        );
+        break;
+      case "start":
+        return _react2["default"].createElement(
+          "div",
+          { className: "board start mdl-shadow--8dp" },
+          _react2["default"].createElement(
+            "div",
+            { className: "board-options " + activeStatus },
+            _react2["default"].createElement(
+              "div",
+              { className: "options", id: "option-x", onClick: this.handleClick.bind(this, "x") },
+              _react2["default"].createElement(
+                "svg",
+                { className: "mark-icon" },
+                _react2["default"].createElement("use", { xlinkHref: "#x-mark" })
+              )
+            ),
+            _react2["default"].createElement(
+              "div",
+              { className: "options", id: "option-o", onClick: this.handleClick.bind(this, "o") },
+              _react2["default"].createElement(
+                "svg",
+                { className: "mark-icon" },
+                _react2["default"].createElement("use", { xlinkHref: "#o-mark" })
+              )
+            )
+          ),
+          _react2["default"].createElement(
+            "div",
+            { id: "text-container" },
+            _react2["default"].createElement(
+              "p",
+              { id: "text" },
+              "Choose Your Mark"
+            )
           )
         );
         break;
@@ -388,6 +423,7 @@ var pathObj = {
   "8": { "layout": ["tr", "mm", "bl"], "marks": 0 }
 };
 var boxes = [{ id: "tl", paths: ["1", "4", "7"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "tm", paths: ["2", "4"], bgColor: "light-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "tr", paths: ["3", "4", "8"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "ml", paths: ["1", "5"], bgColor: "light-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "mm", paths: ["2", "5", "7", "8"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "mr", paths: ["3", "5"], bgColor: "light-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "bl", paths: ["1", "6", "8"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "bm", paths: ["2", "6"], bgColor: "light-box", markedColorClass: undefined, checked: false, mark: undefined }, { id: "br", paths: ["3", "6", "7"], bgColor: "dark-box", markedColorClass: undefined, checked: false, mark: undefined }];
+// default game signs
 var gameSigns = {
   user: "x",
   comp: "o"
@@ -395,7 +431,7 @@ var gameSigns = {
 var corners = ["tl", "tr", "bl", "br"];
 var middleEdges = ["tm", "ml", "mr", "bm"];
 var showingResults = false;
-var boardToShow = "board";
+var boardToShow = "start";
 
 /* ALL COMPUTER LOGIC PSEUDO CODE
 
@@ -502,6 +538,17 @@ function showWinningBoxes(row, resolve, reject) {
     reject("No winner");
   }
 }
+function assignMarks(userMarkPayload) {
+  console.log('action made it into the store and is changing', userMarkPayload.action);
+  var _userMarkPayload$action = userMarkPayload.action;
+  var data = _userMarkPayload$action.data;
+  var actionType = _userMarkPayload$action.actionType;
+
+  gameSigns.user = data;
+  gameSigns.comp = data === "x" ? "y" : "x";
+  console.log(gameSigns);
+}
+
 function toggleResults() {
   boardToShow = "results";
 }
@@ -636,6 +683,10 @@ var BoardStore = _objectAssign2["default"]({}, _events.EventEmitter.prototype, {
 
 _dispatcherAppDispatcherJs.AppDispatcher.register(function (payload) {
   switch (payload.action.actionType) {
+    case "assignMarks":
+      assignMarks(payload);
+      BoardStore.emitChange();
+      break;
     case "makeUserChoice":
       updateUserPick(payload);
       BoardStore.emitChange();

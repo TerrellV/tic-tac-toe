@@ -88,6 +88,69 @@ header{
         }
         &.start {
           // this is for the start board
+          .board-options {
+            width: 100%;
+            box-sizing: border-box;
+            height: 70%;
+            @include center-me-horiz();
+            font-size: 16px;
+            &:after{
+              content: "";
+              display: block;
+              height: 4px;
+              width: 50%;
+              left: 0px;
+              position: absolute;
+              bottom: -2px;
+              background-color: $teal;
+              @include transition("all 500ms ease");
+              z-index: 1000;
+            }
+            &.o-active {
+              &:after {
+                background-color: $grey;
+                @include transform("translateX(100%)");
+              }
+            }
+            .options {
+              display: inline-block;
+              width: 50%;
+              padding: 35% 0px;
+              position: relative;
+              box-sizing: inherit;
+              @include transition("all 400ms ease");
+              .mark-icon {
+                @include center-me();
+                width: 50%;
+                height: 50%;
+                display: inline-block;
+              }
+            }
+            #option-x {
+              fill: $teal;
+            }
+            #option-o {
+              fill: $grey;
+            }
+          }
+          #text-container {
+            position: absolute;
+            box-sizing: border-box;
+            bottom: 0;
+            width: 100%;
+            height: 30%;
+            border-top: 2px solid transparentize($grey, .7);
+            z-index: -1;
+            #text {
+              width: 100%;
+              text-align: center;
+              @include center-me();
+              font-size: 18px;
+              font-family:"Roboto", sans-serif;
+              font-weight: 500;
+              color: $dark;
+            }
+          }
         }
         .inner-board {
           width: 101%;

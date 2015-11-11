@@ -28,6 +28,7 @@ let boxes = [
   {id:"bm", paths:["2","6"], bgColor:"light-box", markedColorClass:undefined, checked:false, mark:undefined},
   {id:"br", paths:["3","6","7"], bgColor:"dark-box", markedColorClass:undefined, checked:false, mark:undefined}
 ];
+// default game signs
 let gameSigns = {
   user: "x",
   comp: "o"
@@ -35,7 +36,7 @@ let gameSigns = {
 let corners = ["tl","tr","bl","br"];
 let middleEdges = ["tm","ml","mr","bm"];
 let showingResults = false;
-let boardToShow = "board";
+let boardToShow = "start";
 
 /* ALL COMPUTER LOGIC PSEUDO CODE
 
@@ -126,6 +127,14 @@ function showWinningBoxes(row,resolve,reject){
     reject("No winner")
   }
 }
+function assignMarks(userMarkPayload) {
+  console.log('action made it into the store and is changing', userMarkPayload.action);
+  let { action:{data,actionType} } = userMarkPayload;
+  gameSigns.user = data;
+  gameSigns.comp = (data === "x")? "y" : "x";
+  console.log(gameSigns);
+}
+
 function toggleResults(){
   boardToShow = "results";
 }
@@ -235,6 +244,10 @@ let BoardStore = assign({}, EventEmitter.prototype, {
 
 AppDispatcher.register(function(payload) {
   switch( payload.action.actionType ){
+    case "assignMarks" :
+      assignMarks(payload);
+      BoardStore.emitChange();
+      break;
     case "makeUserChoice" :
       updateUserPick(payload);
       BoardStore.emitChange();
