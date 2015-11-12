@@ -4,15 +4,17 @@ import {BoardActions} from "../actions/BoardActions.js";
 
 let Box = React.createClass({
   getInitialState: function(){
-    return {}
+    return {loading: true}
   },
   handleClick: function(data){
     if (this.props.boxInfo.checked === false){
 
       data.boxInfo = this.props.boxInfo;
-
+      // make the user choice
       BoardActions.makeUserChoice(data);
-      BoardActions.makeComputerChoice(data);
+      // delay 1 second and make the computer choice
+      // disable board while waiting
+      window.setTimeout(BoardActions.makeComputerChoice.bind(this,data), 500);
 
     } else {console.error("BOX IS ALREADY CHECKED")}
   },

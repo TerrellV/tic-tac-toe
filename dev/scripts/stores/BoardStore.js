@@ -128,11 +128,13 @@ function showWinningBoxes(row,resolve,reject){
   }
 }
 function assignMarks(userMarkPayload) {
-  console.log('action made it into the store and is changing', userMarkPayload.action);
   let { action:{data,actionType} } = userMarkPayload;
   gameSigns.user = data;
-  gameSigns.comp = (data === "x")? "y" : "x";
-  console.log(gameSigns);
+  gameSigns.comp = (data === "x")? "o" : "x";
+}
+
+function showBoard( board ){
+  boardToShow = board;
 }
 
 function toggleResults(){
@@ -246,6 +248,10 @@ AppDispatcher.register(function(payload) {
   switch( payload.action.actionType ){
     case "assignMarks" :
       assignMarks(payload);
+      BoardStore.emitChange();
+      break;
+    case "startBoard" :
+      showBoard('board');
       BoardStore.emitChange();
       break;
     case "makeUserChoice" :

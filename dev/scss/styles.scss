@@ -40,33 +40,6 @@ header{
       width: 100%;
       position: relative;
       height: 80vh;
-      .result-container {
-        position: relative;
-        left: 50%;
-        top: 50%;
-        z-index: 1;
-        width: 50vh;
-        max-width: 90vw;
-        height: 50.5vh;
-        max-height: 90vw;
-        overflow: hidden;
-        @include transform("translate(-50%,-50%)");
-        &.hide {
-          opacity: 0;
-          display: none;
-        }
-        .result-modal{
-          @include center-me();
-          background-color: $red;
-          width: 50vh;
-          max-width: 90vw;
-          height: 50vh;
-          max-height: 90vw;
-          border-radius: 50%;
-          @include animation("show-results 1s ease-in-out both");
-          // animation name duration timing-function delay iteration count, direction, fill-mode
-        }
-      }
       .board{
         position: absolute;
         left: 50%;
@@ -79,19 +52,17 @@ header{
         line-height: 0px;
         overflow: hidden;
         -webkit-backface-visibility: hidden;
-        @include transition("all 1s ease");
+        @include animation("start-game-animate 1s ease-in-out backwards");
         @include transform("translate(-50%,-50%) scale(1)");
-        &.results {
-          // this is for the results board
-          @include transform("translate(-50%,-50%) scale(.5)");
-          border-radius: 50%;
-        }
+
         &.start {
           // this is for the start board
+          background-color: $light-box;
+          height: 40vh;
           .board-options {
             width: 100%;
             box-sizing: border-box;
-            height: 70%;
+            height: 65%;
             @include center-me-horiz();
             font-size: 16px;
             &:after{
@@ -108,14 +79,19 @@ header{
             }
             &.o-active {
               &:after {
-                background-color: $grey;
                 @include transform("translateX(100%)");
+              }
+              #option-o {
+                fill: $teal;
+              }
+              #option-x {
+                fill: $grey;
               }
             }
             .options {
               display: inline-block;
               width: 50%;
-              padding: 35% 0px;
+              padding: 25% 0px;
               position: relative;
               box-sizing: inherit;
               @include transition("all 400ms ease");
@@ -138,7 +114,7 @@ header{
             box-sizing: border-box;
             bottom: 0;
             width: 100%;
-            height: 30%;
+            height: 35%;
             border-top: 2px solid transparentize($grey, .7);
             z-index: -1;
             #text {
@@ -187,32 +163,48 @@ header{
           }
         }
       }
+      #results-board {
+        // this is for the results board
+        width: 50vh;
+        height: 50vh;
+        @include center-me();
+        @include animation("game-results-animate 750ms ease-in-out forwards");
+      }
     }
-    #reset-btn {
+    .reset-btn {
       background-color: transparent;
       position: absolute;
-      bottom: 0px;
-      width: 40%;
-      height: 10vh;
+      box-sizing: border-box;
+      bottom: 30px;
+      width: 200px;
+      height: 50px;
       text-align: center;
       outline: none;
       border: 2px solid $teal;
       z-index: 2;
       border-radius: 100px;
       @include center-me-horiz();
+      @include transition("all 500ms ease-in-out");
+      &.fill {
+        background-color: $teal;
+        #reset-btn-text {
+          color: white;
+        }
+      }
       #reset-btn-text {
         color: $teal;
         font-size: 1.25em;
         font-family: "Roboto",sans-serif;
         font-weight: 300;
-        line-height: 10vh;
+        line-height: 48px;
         display: inline-block;
         letter-spacing: 1px;
-        margin-bottom: 0;
+        margin-bottom: 0px;
       }
     }
   }
 }
+
 
 // checkered starting colors
 .dark-box {

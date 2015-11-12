@@ -29,7 +29,7 @@ let App = React.createClass({
           <Modal storeData={this.state.storeData}/>
           <Board storeData={this.state.storeData}/>
         </div>
-        <ResetButton/>
+        <ResetButton storeData={this.state.storeData}/>
       </div>
     )
   },

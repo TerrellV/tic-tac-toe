@@ -4,20 +4,34 @@ import {BoardActions} from "../actions/BoardActions.js";
 
 let ResetButton = React.createClass({
   getInitialState: function(){
-    return {}
+    return {
+      loading: true
+    }
   },
-  handleClick: function() {
-    console.log('Reset Clicked');
-    BoardActions.resetBoard();
+  handleClick: function( action ) {
+    (action === "reset")
+      ? BoardActions.resetBoard()
+      : BoardActions.startBoard(200);
   },
   render: function(){
-    return (
-      <div>
-        <button id="reset-btn" onClick={this.handleClick}>
-          <p id="reset-btn-text">Reset</p>
-        </button>
-      </div>
-    )
+    if (this.props.storeData.boardToShow === "start") {
+      return (
+        <div>
+          <button className="reset-btn" onClick={this.handleClick.bind(this,"start")}>
+            <p id="reset-btn-text">Start</p>
+          </button>
+        </div>
+      )
+    }
+    else {
+      return (
+        <div>
+          <button className="reset-btn fill" onClick={this.handleClick.bind(this,"reset")}>
+            <p id="reset-btn-text">Reset</p>
+          </button>
+        </div>
+      )
+    }
   }
 })
 

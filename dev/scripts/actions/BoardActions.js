@@ -21,6 +21,12 @@ let BoardActions = {
       data
     });
   },
+  startBoard: function(data){
+    AppDispatcher.handleViewAction({
+      actionType: "startBoard",
+      data
+    });
+  },
   resetBoard: function(data){
     AppDispatcher.handleViewAction({
       actionType: "resetBoard",

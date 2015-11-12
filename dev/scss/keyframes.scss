@@ -25,13 +25,20 @@
     @include transform("translate(-50%,-50%) scale(1.5,1.4)");
   };
 }
-
-@keyframes show-results{
-  0%{
-    @include transform("translate(-50%,-50%) scale(0)")
+// state 1 - state 2 animate
+@keyframes start-game-animate{
+  from{
+    background-color: $light-box;
+    height: 40vh;
   };
-  100%{
-    @include transform("translate(-50%,-50%) scale(1.5)");
+  to{}
+}
+@-webkit-keyframes game-results-animate{
+  from{
+    border-radius: 0%;
+  };
+  to{
+    border-radius: 50%;
   }
 }
 // not working yet
