@@ -320,7 +320,7 @@ AppDispatcher.register(function(payload) {
       break;
     case "makeComputerChoice":
       // sets computer choice to necessary function result based on what difficult is set and its preset function defined in the state ...
-      let compChoice = difficulties.filter( diffs => diffs.type === difficulty)[0].fn();
+      let compChoice = difficulties.filter( diffs => diffs.type === difficulty)[0].fn(payload);
       updateComputerPick(compChoice);
       let p2 = new Promise( showWinningBoxes.bind(this,checkForWinner()));
       BoardStore.emitChange(); // emitting for purpose of highlights

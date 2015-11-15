@@ -30,9 +30,9 @@ let DifficultyScreen = React.createClass({
       <ReactCSSTransitionGroup
       transitionName="slide"
       transitionLeaveTimeout={1000}
-      transitionEnterTimeout={1000}
+      transitionEnterTimeout={2000}
       transitionAppear={true}
-      transitionAppearTimeout={300}>
+      transitionAppearTimeout={2000}>
         <div id="difficulty-board" className="board mdl-shadow--8dp">
           <div className={"pannels " + activePannel }>
             <div className={"diff-pannel"} id="easy"

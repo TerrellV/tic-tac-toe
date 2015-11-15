@@ -19,10 +19,21 @@
 //
 .slide-appear {
   opacity: 1;
-  @include transform("translate(-50%,150%) !important")
+  @include transform("translate(150%,-50%) !important")
 }
 
 .slide-appear.slide-appear-active {
+  opacity: 1;
+  transition: all 750ms ease-in-out;
+  @include transform("translate(-50%,-50%) !important");
+}
+
+.slideUp-appear {
+  opacity: 1;
+  @include transform("translate(-50%,50%) !important")
+}
+
+.slideUp-appear.slideUp-appear-active {
   opacity: 1;
   transition: all 750ms ease-in-out;
   @include transform("translate(-50%,-50%) !important");

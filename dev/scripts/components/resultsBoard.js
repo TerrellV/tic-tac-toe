@@ -15,7 +15,7 @@ let ResultsBoard = React.createClass({
 
     return (
       <ReactCSSTransitionGroup
-      transitionName="slide"
+      transitionName="slideUp"
       transitionEnterTimeout={500}
       transitionLeaveTimeout={500}
       transitionAppear={true}

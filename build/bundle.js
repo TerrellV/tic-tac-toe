@@ -300,9 +300,9 @@ var DifficultyScreen = _react2["default"].createClass({
       {
         transitionName: "slide",
         transitionLeaveTimeout: 1000,
-        transitionEnterTimeout: 1000,
+        transitionEnterTimeout: 2000,
         transitionAppear: true,
-        transitionAppearTimeout: 300 },
+        transitionAppearTimeout: 2000 },
       _react2["default"].createElement(
         "div",
         { id: "difficulty-board", className: "board mdl-shadow--8dp" },
@@ -510,7 +510,7 @@ var ResultsBoard = _react2["default"].createClass({
     return _react2["default"].createElement(
       _node_modulesReactLibReactCSSTransitionGroupJs2["default"],
       {
-        transitionName: "slide",
+        transitionName: "slideUp",
         transitionEnterTimeout: 500,
         transitionLeaveTimeout: 500,
         transitionAppear: true,
@@ -1028,7 +1028,7 @@ _dispatcherAppDispatcherJs.AppDispatcher.register(function (payload) {
       // sets computer choice to necessary function result based on what difficult is set and its preset function defined in the state ...
       var compChoice = difficulties.filter(function (diffs) {
         return diffs.type === difficulty;
-      })[0].fn();
+      })[0].fn(payload);
       updateComputerPick(compChoice);
       var p2 = new Promise(showWinningBoxes.bind(this, checkForWinner()));
       BoardStore.emitChange(); // emitting for purpose of highlights
