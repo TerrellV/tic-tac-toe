@@ -21,6 +21,7 @@ let Board = React.createClass({
         break;
       case "difficulty":
         activeBoard = <DifficultyScreen storeData = {this.props.storeData}/>
+        break;
       case "results":
         activeBoard = <ResultsBoard storeData = {this.props.storeData}/>
         break;

@@ -92,7 +92,6 @@ function computerLogicImpossible(payload){
     default: console.error("Fell Through Switch Logic");;
   }
 }
-
 function computerLogicEasy(payload) {
   // if the offensive win is open, take it
   // else, pick a randome open box
@@ -120,6 +119,12 @@ function computerLogicRegular(payload) {
   functions for updating store's state
  ///////////////////////////////*/
 
+function setDifficulty(payload){
+  if (difficulties.map(a => a.type).indexOf(payload.action.data) > -1 ) {
+    difficulty = payload.action.data;
+  }
+  else console.error("payload recieved not accurate for setting difficulty")
+}
 function updateUserPick(payload){
   let {source,action} = payload;
   let {actionType, data} = action;
@@ -165,7 +170,6 @@ function assignMarks(userMarkPayload) {
   gameSigns.user = data;
   gameSigns.comp = (data === "x")? "o" : "x";
 }
-
 function showBoard( board ){
   boardToShow = board;
 }
@@ -275,7 +279,7 @@ let BoardStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT,callback)
   },
   getState: function() {
-    return { pathObj, boxes, corners, middleEdges, gameSigns, showingResults, boardToShow}
+    return { pathObj, boxes, corners, middleEdges, gameSigns, showingResults, boardToShow, difficulties, difficulty}
   }
 });
 
@@ -289,6 +293,14 @@ AppDispatcher.register(function(payload) {
   switch( payload.action.actionType ){
     case "assignMarks" :
       assignMarks(payload);
+      BoardStore.emitChange();
+      break;
+    case "showDifficultyBoard" :
+      showBoard('difficulty');
+      BoardStore.emitChange();
+      break;
+    case "setDifficulty" :
+      setDifficulty(payload);
       BoardStore.emitChange();
       break;
     case "startBoard" :

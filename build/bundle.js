@@ -16,6 +16,12 @@ var BoardActions = {
       data: data
     });
   },
+  showDifficultyBoard: function showDifficultyBoard(data) {
+    _dispatcherAppDispatcherJs.AppDispatcher.handleViewAction({
+      actionType: "showDifficultyBoard",
+      data: data
+    });
+  },
   setDifficulty: function setDifficulty(data) {
     _dispatcherAppDispatcherJs.AppDispatcher.handleViewAction({
       actionType: "setDifficulty",
@@ -159,6 +165,7 @@ var Board = _react2["default"].createClass({
         break;
       case "difficulty":
         activeBoard = _react2["default"].createElement(_difficultyBoardJs.DifficultyScreen, { storeData: this.props.storeData });
+        break;
       case "results":
         activeBoard = _react2["default"].createElement(_resultsBoardJs.ResultsBoard, { storeData: this.props.storeData });
         break;
@@ -264,8 +271,8 @@ var DifficultyScreen = _react2["default"].createClass({
   getInitialState: function getInitialState() {
     return {};
   },
-  handleClick: function handleClick(info) {
-    // BoardActions.assignMarks(info)
+  handleClick: function handleClick(diff) {
+    _actionsBoardActionsJs.BoardActions.setDifficulty(diff);
   },
   render: function render() {
     var _props$storeData = this.props.storeData;
@@ -274,10 +281,24 @@ var DifficultyScreen = _react2["default"].createClass({
     var boardToShow = _props$storeData.boardToShow;
     var gameSigns = _props$storeData.gameSigns;
 
+    var pannels = {
+      easy: { deff: "e-active" },
+      regular: { deff: "r-active" },
+      impossible: { deff: "i-active" }
+    };
+
+    var CurrentDiff = this.props.storeData.difficulty;
+
+    var activePannel = Object.keys(pannels).map(function (diff) {
+      return diff === CurrentDiff ? pannels[diff].deff : undefined;
+    }).filter(function (n) {
+      return n !== undefined;
+    })[0];
+
     return _react2["default"].createElement(
       _node_modulesReactLibReactCSSTransitionGroupJs2["default"],
       {
-        transitionName: "example",
+        transitionName: "slide",
         transitionLeaveTimeout: 1000,
         transitionEnterTimeout: 1000,
         transitionAppear: true,
@@ -285,7 +306,25 @@ var DifficultyScreen = _react2["default"].createClass({
       _react2["default"].createElement(
         "div",
         { id: "difficulty-board", className: "board mdl-shadow--8dp" },
-        "Choose your difficulty"
+        _react2["default"].createElement(
+          "div",
+          { className: "pannels " + activePannel },
+          _react2["default"].createElement("div", { className: "diff-pannel", id: "easy",
+            onClick: this.handleClick.bind(this, "easy") }),
+          _react2["default"].createElement("div", { className: "diff-pannel", id: "regular",
+            onClick: this.handleClick.bind(this, "regular") }),
+          _react2["default"].createElement("div", { className: "diff-pannel", id: "impossible",
+            onClick: this.handleClick.bind(this, "impossible") })
+        ),
+        _react2["default"].createElement(
+          "div",
+          { id: "text-container" },
+          _react2["default"].createElement(
+            "p",
+            { id: "text" },
+            "Choose Your Difficulty"
+          )
+        )
       )
     );
   }
@@ -378,8 +417,11 @@ var ResetButton = _react2["default"].createClass({
       loading: true
     };
   },
-  handleClick: function handleClick(action) {
-    action === "reset" ? _actionsBoardActionsJs.BoardActions.resetBoard() : _actionsBoardActionsJs.BoardActions.startBoard(200);
+  handleClick: function handleClick(action, data) {
+    var actions = [{ name: "reset", fn: _actionsBoardActionsJs.BoardActions.resetBoard }, { name: "chooseDifficulty", fn: _actionsBoardActionsJs.BoardActions.showDifficultyBoard }, { name: "start", fn: _actionsBoardActionsJs.BoardActions.startBoard.bind(this, 200) }];
+    actions.filter(function (actObj) {
+      return actObj.name === action;
+    })[0].fn();
   },
   render: function render() {
     if (this.props.storeData.boardToShow === "start") {
@@ -388,7 +430,21 @@ var ResetButton = _react2["default"].createClass({
         null,
         _react2["default"].createElement(
           "button",
-          { className: "reset-btn", onClick: this.handleClick.bind(this, "start") },
+          { className: "reset-btn", onClick: this.handleClick.bind(this, "chooseDifficulty") },
+          _react2["default"].createElement(
+            "p",
+            { id: "reset-btn-text" },
+            "Next"
+          )
+        )
+      );
+    } else if (this.props.storeData.boardToShow === "difficulty") {
+      return _react2["default"].createElement(
+        "div",
+        null,
+        _react2["default"].createElement(
+          "button",
+          { className: "reset-btn fill", onClick: this.handleClick.bind(this, "reset") },
           _react2["default"].createElement(
             "p",
             { id: "reset-btn-text" },
@@ -698,7 +754,6 @@ function computerLogicImpossible(payload) {
       console.error("Fell Through Switch Logic");;
   }
 }
-
 function computerLogicEasy(payload) {
   // if the offensive win is open, take it
   // else, pick a randome open box
@@ -726,6 +781,13 @@ function computerLogicRegular(payload) {
   functions for updating store's state
  ///////////////////////////////*/
 
+function setDifficulty(payload) {
+  if (difficulties.map(function (a) {
+    return a.type;
+  }).indexOf(payload.action.data) > -1) {
+    difficulty = payload.action.data;
+  } else console.error("payload recieved not accurate for setting difficulty");
+}
 function updateUserPick(payload) {
   var source = payload.source;
   var action = payload.action;
@@ -786,7 +848,6 @@ function assignMarks(userMarkPayload) {
   gameSigns.user = data;
   gameSigns.comp = data === "x" ? "o" : "x";
 }
-
 function showBoard(board) {
   boardToShow = board;
 }
@@ -925,7 +986,7 @@ var BoardStore = _objectAssign2["default"]({}, _events.EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
   getState: function getState() {
-    return { pathObj: pathObj, boxes: boxes, corners: corners, middleEdges: middleEdges, gameSigns: gameSigns, showingResults: showingResults, boardToShow: boardToShow };
+    return { pathObj: pathObj, boxes: boxes, corners: corners, middleEdges: middleEdges, gameSigns: gameSigns, showingResults: showingResults, boardToShow: boardToShow, difficulties: difficulties, difficulty: difficulty };
   }
 });
 
@@ -938,6 +999,14 @@ _dispatcherAppDispatcherJs.AppDispatcher.register(function (payload) {
   switch (payload.action.actionType) {
     case "assignMarks":
       assignMarks(payload);
+      BoardStore.emitChange();
+      break;
+    case "showDifficultyBoard":
+      showBoard('difficulty');
+      BoardStore.emitChange();
+      break;
+    case "setDifficulty":
+      setDifficulty(payload);
       BoardStore.emitChange();
       break;
     case "startBoard":

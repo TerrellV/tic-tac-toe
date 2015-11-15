@@ -9,6 +9,12 @@ let BoardActions = {
       data
     });
   },
+  showDifficultyBoard: function(data){
+    AppDispatcher.handleViewAction({
+      actionType: "showDifficultyBoard",
+      data
+    });
+  },
   setDifficulty: function(data){
     AppDispatcher.handleViewAction({
       actionType: "setDifficulty",

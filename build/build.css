@@ -243,6 +243,65 @@ header {
             font-family: "Roboto", sans-serif;
             font-weight: 500;
             color: #222831; }
+        #main #app #board-container #master-board #difficulty-board .pannels {
+          position: absolute;
+          height: 65%;
+          width: 100%; }
+          #main #app #board-container #master-board #difficulty-board .pannels .diff-pannel {
+            box-sizing: border-box;
+            border: 2px solid yellow;
+            width: 33.3%;
+            height: 100%;
+            display: inline-block; }
+          #main #app #board-container #master-board #difficulty-board .pannels:after {
+            content: "";
+            display: block;
+            height: 4px;
+            width: 33.3%;
+            left: 0px;
+            position: absolute;
+            bottom: -1px;
+            background-color: #00ADB5;
+            z-index: 10;
+            -webkit-transition: all 500ms ease;
+            -moz-transition: all 500ms ease;
+            -ms-transition: all 500ms ease;
+            -o-transition: all 500ms ease;
+            transition: all 500ms ease; }
+          #main #app #board-container #master-board #difficulty-board .pannels.r-active:after {
+            -webkit-transform: translateX(100%);
+            -moz-transform: translateX(100%);
+            -ms-transform: translateX(100%);
+            -o-transform: translateX(100%);
+            transform: translateX(100%); }
+          #main #app #board-container #master-board #difficulty-board .pannels.i-active:after {
+            -webkit-transform: translateX(200%);
+            -moz-transform: translateX(200%);
+            -ms-transform: translateX(200%);
+            -o-transform: translateX(200%);
+            transform: translateX(200%); }
+        #main #app #board-container #master-board #difficulty-board #text-container {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 35%;
+          border-top: 2px solid rgba(88, 96, 107, 0.3);
+          z-index: -1; }
+          #main #app #board-container #master-board #difficulty-board #text-container #text {
+            width: 100%;
+            text-align: center;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%,-50%);
+            -moz-transform: translate(-50%,-50%);
+            -ms-transform: translate(-50%,-50%);
+            -o-transform: translate(-50%,-50%);
+            transform: translate(-50%,-50%);
+            font-size: 18px;
+            font-family: "Roboto", sans-serif;
+            font-weight: 500;
+            color: #222831; }
         #main #app #board-container #master-board #game-board .inner-board {
           width: 101%;
           height: 101%;
