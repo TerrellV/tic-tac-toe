@@ -309,12 +309,51 @@ var DifficultyScreen = _react2["default"].createClass({
         _react2["default"].createElement(
           "div",
           { className: "pannels " + activePannel },
-          _react2["default"].createElement("div", { className: "diff-pannel", id: "easy",
-            onClick: this.handleClick.bind(this, "easy") }),
-          _react2["default"].createElement("div", { className: "diff-pannel", id: "regular",
-            onClick: this.handleClick.bind(this, "regular") }),
-          _react2["default"].createElement("div", { className: "diff-pannel", id: "impossible",
-            onClick: this.handleClick.bind(this, "impossible") })
+          _react2["default"].createElement(
+            "div",
+            { className: "diff-pannel", id: "easy",
+              onClick: this.handleClick.bind(this, "easy") },
+            _react2["default"].createElement(
+              "svg",
+              { className: "icons", id: "happy-face-icon" },
+              _react2["default"].createElement("use", { xlinkHref: "#happy-face-icon" })
+            ),
+            _react2["default"].createElement(
+              "h2",
+              { id: "easy-text", className: "pannel-text" },
+              "Easy"
+            )
+          ),
+          _react2["default"].createElement(
+            "div",
+            { className: "diff-pannel", id: "regular",
+              onClick: this.handleClick.bind(this, "regular") },
+            _react2["default"].createElement(
+              "svg",
+              { className: "icons", id: "num-pad-icon" },
+              _react2["default"].createElement("use", { xlinkHref: "#num-pad-icon" })
+            ),
+            _react2["default"].createElement(
+              "h2",
+              { id: "regular-text", className: "pannel-text" },
+              "Regular"
+            )
+          ),
+          _react2["default"].createElement(
+            "div",
+            { className: "diff-pannel", id: "impossible",
+              onClick: this.handleClick.bind(this, "impossible") },
+            _react2["default"].createElement(
+              "svg",
+              { className: "icons", id: "fire-icon" },
+              _react2["default"].createElement("use", { xlinkHref: "#fire-icon" })
+            ),
+            _react2["default"].createElement(
+              "h2",
+              { id: "impossible-text", className: "pannel-text" },
+              "Impossible"
+            )
+          )
         ),
         _react2["default"].createElement(
           "div",

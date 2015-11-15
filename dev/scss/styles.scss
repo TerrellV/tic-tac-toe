@@ -128,12 +128,31 @@ header{
             position: absolute;
             height: 65%;
             width: 100%;
+            -webkit-backface-visibility: hidden;
             .diff-pannel {
-              box-sizing: border-box;
-              border: 2px solid yellow;
-              width: 33.3%;
+              position: relative;
+              top: 0px;
+              width: 33.333%;
               height: 100%;
               display: inline-block;
+              vertical-align: top;
+              .icons{
+                @include center-me-horiz();
+                top: 20%;
+                fill: $dark-box;
+                height: 30%;
+                width: 50%;
+                @include transition("all 500ms ease");
+              }
+              .pannel-text {
+                @include center-me-horiz();
+                bottom: 10%;
+                font-family: "Roboto", sans-serif;
+                font-size: 20px;
+                font-weight: 400;
+                color: $l-grey;
+                @include transition("all 500ms ease");
+              }
             }
             &:after{
               content: "";
@@ -147,14 +166,59 @@ header{
               z-index: 10;
               @include transition("all 500ms ease");
             }
+            #easy{
+              #happy-face-icon {
+                fill:$teal;
+              }
+              #easy-text {
+                font-weight: 600;
+                color: $dark;
+              }
+            }
             &.r-active {
               &:after {
                 @include transform("translateX(100%)"); // goes where its needed
+              }
+              #regular {
+                #num-pad-icon {
+                  fill: $teal;
+                }
+              }
+              #easy{
+                #happy-face-icon {
+                  fill:$dark-box;
+                }
+                #easy-text {
+                  font-weight: 400;
+                  color: $l-grey;
+                }
+              }
+              #regular-text {
+                font-weight: 600;
+                color: $dark;
               }
             }
             &.i-active {
               &:after {
                 @include transform("translateX(200%)"); // goes where its needed
+              }
+              #impossible {
+                #fire-icon {
+                  fill:$teal;
+                }
+              }
+              #easy{
+                #happy-face-icon {
+                  fill:$dark-box;
+                }
+                #easy-text {
+                  font-weight: 400;
+                  color: $l-grey;
+                }
+              }
+              #impossible-text{
+                font-weight: 600;
+                color: $dark;
               }
             }
           }

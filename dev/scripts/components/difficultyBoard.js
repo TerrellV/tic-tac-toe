@@ -35,14 +35,35 @@ let DifficultyScreen = React.createClass({
       transitionAppearTimeout={2000}>
         <div id="difficulty-board" className="board mdl-shadow--8dp">
           <div className={"pannels " + activePannel }>
+
             <div className={"diff-pannel"} id="easy"
             onClick={this.handleClick.bind(this,"easy")}>
+              <svg className="icons" id="happy-face-icon">
+                <use xlinkHref={"#happy-face-icon"}></use>
+              </svg>
+              <h2 id="easy-text" className="pannel-text">
+                Easy
+              </h2>
             </div>
+
             <div className={"diff-pannel"} id="regular"
             onClick={this.handleClick.bind(this,"regular")}>
+              <svg className="icons" id="num-pad-icon">
+                <use xlinkHref={"#num-pad-icon"}></use>
+              </svg>
+              <h2 id="regular-text" className="pannel-text">
+                Regular
+              </h2>
             </div>
+
             <div className={"diff-pannel"} id="impossible"
             onClick={this.handleClick.bind(this,"impossible")}>
+              <svg className="icons" id="fire-icon">
+                <use xlinkHref={"#fire-icon"}></use>
+              </svg>
+              <h2 id="impossible-text" className="pannel-text">
+                Impossible
+              </h2>
             </div>
           </div>
           <div id="text-container">

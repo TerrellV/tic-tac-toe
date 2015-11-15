@@ -3,7 +3,7 @@ $grey: #58606B;
 $teal: #00ADB5;
 $white: #EEEEEE;
 $red: #EB586F;
-
+$l-grey: lighten($grey,12%);
 $light-box: #F4F4F4;
 $dark-box: darken($light-box,5%);
 

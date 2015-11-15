@@ -263,13 +263,50 @@ header {
         #main #app #board-container #master-board #difficulty-board .pannels {
           position: absolute;
           height: 65%;
-          width: 100%; }
+          width: 100%;
+          -webkit-backface-visibility: hidden; }
           #main #app #board-container #master-board #difficulty-board .pannels .diff-pannel {
-            box-sizing: border-box;
-            border: 2px solid yellow;
-            width: 33.3%;
+            position: relative;
+            top: 0px;
+            width: 33.333%;
             height: 100%;
-            display: inline-block; }
+            display: inline-block;
+            vertical-align: top; }
+            #main #app #board-container #master-board #difficulty-board .pannels .diff-pannel .icons {
+              position: absolute;
+              left: 50%;
+              -webkit-transform: translateX(-50%);
+              -moz-transform: translateX(-50%);
+              -ms-transform: translateX(-50%);
+              -o-transform: translateX(-50%);
+              transform: translateX(-50%);
+              top: 20%;
+              fill: #e7e7e7;
+              height: 30%;
+              width: 50%;
+              -webkit-transition: all 500ms ease;
+              -moz-transition: all 500ms ease;
+              -ms-transition: all 500ms ease;
+              -o-transition: all 500ms ease;
+              transition: all 500ms ease; }
+            #main #app #board-container #master-board #difficulty-board .pannels .diff-pannel .pannel-text {
+              position: absolute;
+              left: 50%;
+              -webkit-transform: translateX(-50%);
+              -moz-transform: translateX(-50%);
+              -ms-transform: translateX(-50%);
+              -o-transform: translateX(-50%);
+              transform: translateX(-50%);
+              bottom: 10%;
+              font-family: "Roboto", sans-serif;
+              font-size: 20px;
+              font-weight: 400;
+              color: #747e8c;
+              -webkit-transition: all 500ms ease;
+              -moz-transition: all 500ms ease;
+              -ms-transition: all 500ms ease;
+              -o-transition: all 500ms ease;
+              transition: all 500ms ease; }
           #main #app #board-container #master-board #difficulty-board .pannels:after {
             content: "";
             display: block;
@@ -285,18 +322,43 @@ header {
             -ms-transition: all 500ms ease;
             -o-transition: all 500ms ease;
             transition: all 500ms ease; }
+          #main #app #board-container #master-board #difficulty-board .pannels #easy #happy-face-icon {
+            fill: #00ADB5; }
+          #main #app #board-container #master-board #difficulty-board .pannels #easy #easy-text {
+            font-weight: 600;
+            color: #222831; }
           #main #app #board-container #master-board #difficulty-board .pannels.r-active:after {
             -webkit-transform: translateX(100%);
             -moz-transform: translateX(100%);
             -ms-transform: translateX(100%);
             -o-transform: translateX(100%);
             transform: translateX(100%); }
+          #main #app #board-container #master-board #difficulty-board .pannels.r-active #regular #num-pad-icon {
+            fill: #00ADB5; }
+          #main #app #board-container #master-board #difficulty-board .pannels.r-active #easy #happy-face-icon {
+            fill: #e7e7e7; }
+          #main #app #board-container #master-board #difficulty-board .pannels.r-active #easy #easy-text {
+            font-weight: 400;
+            color: #747e8c; }
+          #main #app #board-container #master-board #difficulty-board .pannels.r-active #regular-text {
+            font-weight: 600;
+            color: #222831; }
           #main #app #board-container #master-board #difficulty-board .pannels.i-active:after {
             -webkit-transform: translateX(200%);
             -moz-transform: translateX(200%);
             -ms-transform: translateX(200%);
             -o-transform: translateX(200%);
             transform: translateX(200%); }
+          #main #app #board-container #master-board #difficulty-board .pannels.i-active #impossible #fire-icon {
+            fill: #00ADB5; }
+          #main #app #board-container #master-board #difficulty-board .pannels.i-active #easy #happy-face-icon {
+            fill: #e7e7e7; }
+          #main #app #board-container #master-board #difficulty-board .pannels.i-active #easy #easy-text {
+            font-weight: 400;
+            color: #747e8c; }
+          #main #app #board-container #master-board #difficulty-board .pannels.i-active #impossible-text {
+            font-weight: 600;
+            color: #222831; }
         #main #app #board-container #master-board #difficulty-board #text-container {
           position: absolute;
           bottom: 0;
