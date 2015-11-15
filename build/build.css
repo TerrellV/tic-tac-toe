@@ -184,7 +184,8 @@ header {
           -moz-transform: translateX(-50%);
           -ms-transform: translateX(-50%);
           -o-transform: translateX(-50%);
-          transform: translateX(-50%); }
+          transform: translateX(-50%);
+          -webkit-backface-visibility: hidden; }
           #main #app #board-container #master-board #options-board .board-options:after {
             content: "";
             display: block;
@@ -281,7 +282,7 @@ header {
               -o-transform: translateX(-50%);
               transform: translateX(-50%);
               top: 20%;
-              fill: #e7e7e7;
+              fill: rgba(88, 96, 107, 0.3);
               height: 30%;
               width: 50%;
               -webkit-transition: all 500ms ease;
@@ -301,7 +302,7 @@ header {
               font-family: "Roboto", sans-serif;
               font-size: 20px;
               font-weight: 400;
-              color: #747e8c;
+              color: rgba(88, 96, 107, 0.3);
               -webkit-transition: all 500ms ease;
               -moz-transition: all 500ms ease;
               -ms-transition: all 500ms ease;
@@ -325,7 +326,6 @@ header {
           #main #app #board-container #master-board #difficulty-board .pannels #easy #happy-face-icon {
             fill: #00ADB5; }
           #main #app #board-container #master-board #difficulty-board .pannels #easy #easy-text {
-            font-weight: 600;
             color: #222831; }
           #main #app #board-container #master-board #difficulty-board .pannels.r-active:after {
             -webkit-transform: translateX(100%);
@@ -336,12 +336,10 @@ header {
           #main #app #board-container #master-board #difficulty-board .pannels.r-active #regular #num-pad-icon {
             fill: #00ADB5; }
           #main #app #board-container #master-board #difficulty-board .pannels.r-active #easy #happy-face-icon {
-            fill: #e7e7e7; }
+            fill: rgba(88, 96, 107, 0.3); }
           #main #app #board-container #master-board #difficulty-board .pannels.r-active #easy #easy-text {
-            font-weight: 400;
-            color: #747e8c; }
+            color: rgba(88, 96, 107, 0.3); }
           #main #app #board-container #master-board #difficulty-board .pannels.r-active #regular-text {
-            font-weight: 600;
             color: #222831; }
           #main #app #board-container #master-board #difficulty-board .pannels.i-active:after {
             -webkit-transform: translateX(200%);
@@ -352,12 +350,10 @@ header {
           #main #app #board-container #master-board #difficulty-board .pannels.i-active #impossible #fire-icon {
             fill: #00ADB5; }
           #main #app #board-container #master-board #difficulty-board .pannels.i-active #easy #happy-face-icon {
-            fill: #e7e7e7; }
+            fill: rgba(88, 96, 107, 0.3); }
           #main #app #board-container #master-board #difficulty-board .pannels.i-active #easy #easy-text {
-            font-weight: 400;
-            color: #747e8c; }
+            color: rgba(88, 96, 107, 0.3); }
           #main #app #board-container #master-board #difficulty-board .pannels.i-active #impossible-text {
-            font-weight: 600;
             color: #222831; }
         #main #app #board-container #master-board #difficulty-board #text-container {
           position: absolute;

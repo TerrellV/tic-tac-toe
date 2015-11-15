@@ -60,6 +60,7 @@ header{
             width: 100%;
             height: 65%;
             @include center-me-horiz();
+            -webkit-backface-visibility: hidden;
             &:after{
               content: "";
               display: block;
@@ -139,7 +140,7 @@ header{
               .icons{
                 @include center-me-horiz();
                 top: 20%;
-                fill: $dark-box;
+                fill:$l-grey;
                 height: 30%;
                 width: 50%;
                 @include transition("all 500ms ease");
@@ -171,7 +172,6 @@ header{
                 fill:$teal;
               }
               #easy-text {
-                font-weight: 600;
                 color: $dark;
               }
             }
@@ -186,15 +186,13 @@ header{
               }
               #easy{
                 #happy-face-icon {
-                  fill:$dark-box;
+                  fill:$l-grey;
                 }
                 #easy-text {
-                  font-weight: 400;
                   color: $l-grey;
                 }
               }
               #regular-text {
-                font-weight: 600;
                 color: $dark;
               }
             }
@@ -209,15 +207,13 @@ header{
               }
               #easy{
                 #happy-face-icon {
-                  fill:$dark-box;
+                  fill: $l-grey;
                 }
                 #easy-text {
-                  font-weight: 400;
                   color: $l-grey;
                 }
               }
               #impossible-text{
-                font-weight: 600;
                 color: $dark;
               }
             }
