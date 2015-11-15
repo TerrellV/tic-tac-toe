@@ -87,13 +87,13 @@ header{
             .options {
               display: inline-block;
               width: 50%;
-              padding: 25% 0px;
+              height: 100%;
               position: relative;
-              box-sizing: inherit;
+              box-sizing: border-box;
               @include transition("all 400ms ease");
               .mark-icon {
                 @include center-me();
-                width: 50%;
+                width: 40%;
                 height: 50%;
                 display: inline-block;
               }
