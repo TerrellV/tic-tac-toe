@@ -28,6 +28,16 @@ let boxes = [
   {id:"bm", paths:["2","6"], bgColor:"light-box", markedColorClass:undefined, checked:false, mark:undefined},
   {id:"br", paths:["3","6","7"], bgColor:"dark-box", markedColorClass:undefined, checked:false, mark:undefined}
 ];
+
+// regular makes user choose random option unless its about to win
+// impossible evaluates the board for the win, to play defense, and then make a choice based on the status of the marks on the board.... The user can not win :)
+const difficulties = [
+  {type:"easy", fn:computerLogicEasy},
+  {type:"regular", fn:computerLogicRegular},
+  {type:"impossible", fn:computerLogicImpossible}
+];
+let difficulty = difficulties[0].type;
+
 // default game signs
 let gameSigns = {
   user: "x",
@@ -55,10 +65,10 @@ let boardToShow = "start";
 
 
 /*///////////////////////////////
-  logic function that returns the computers move
+  logic functions that returns the computers move
  ///////////////////////////////*/
 
-function computerLogic(payload){
+function computerLogicImpossible(payload){
   let {source,action} = payload;
   let {actionType,data} = action;
 
@@ -80,6 +90,29 @@ function computerLogic(payload){
       };
       break;
     default: console.error("Fell Through Switch Logic");;
+  }
+}
+
+function computerLogicEasy(payload) {
+  // if the offensive win is open, take it
+  // else, pick a randome open box
+  let boardCheck = evaluateForTwoInPath();
+  return (boardCheck.moveType === "computerWin")? boardCheck.mov : getRandomOpenBox();
+}
+function computerLogicRegular(payload) {
+  // make the defensive move
+  // make the offensive move
+  // go in open spot ...
+
+  let evalBoard = evaluateForTwoInPath();
+
+  switch( evalBoard.moveType ){
+    case "computerWin":
+      return evalBoard.move;
+    case "blockUser":
+      return evalBoard.move;
+    default :
+      return getRandomOpenBox();
   }
 }
 
@@ -204,6 +237,14 @@ function evaluateForTwoInPath() {
     return solutionBox;
   }
 }
+function getRandomOpenBox(){
+  // return array of open box id's
+  let openBoxes = boxes.filter( boxObj => boxObj.mark === undefined )
+    .map( boxObj => boxObj.id);
+
+  let randomIndex = Math.floor(Math.random() * (openBoxes.length) );
+  return openBoxes[randomIndex];
+}
 function getOpenCorner(){
   return corners.filter( box => {
     return boxes.filter( a => a.id === box )[0].mark === undefined
@@ -266,7 +307,8 @@ AppDispatcher.register(function(payload) {
       });
       break;
     case "makeComputerChoice":
-      let compChoice = computerLogic(payload);
+      // sets computer choice to necessary function result based on what difficult is set and its preset function defined in the state ...
+      let compChoice = difficulties.filter( diffs => diffs.type === difficulty)[0].fn();
       updateComputerPick(compChoice);
       let p2 = new Promise( showWinningBoxes.bind(this,checkForWinner()));
       BoardStore.emitChange(); // emitting for purpose of highlights

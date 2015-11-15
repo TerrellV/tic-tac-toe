@@ -3,7 +3,6 @@ import {BoardStore} from "../stores/BoardStore.js";
 import {BoardActions} from "../actions/BoardActions.js";
 import {Board} from "./board.js";
 import {ResetButton} from "./reset-button.js";
-import {Modal} from "./modal-results.js";
 
 let App = React.createClass({
   getInitialState: function() {
@@ -26,7 +25,6 @@ let App = React.createClass({
     return (
       <div id="app">
         <div id="board-container">
-          <Modal storeData={this.state.storeData}/>
           <Board storeData={this.state.storeData}/>
         </div>
         <ResetButton storeData={this.state.storeData}/>

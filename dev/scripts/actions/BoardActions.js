@@ -9,6 +9,12 @@ let BoardActions = {
       data
     });
   },
+  setDifficulty: function(data){
+    AppDispatcher.handleViewAction({
+      actionType: "setDifficulty",
+      data
+    });
+  },
   makeUserChoice: function(data){
     AppDispatcher.handleViewAction({
       actionType: "makeUserChoice",

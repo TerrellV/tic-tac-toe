@@ -1,0 +1,29 @@
+.example-enter {
+  @include transform("translate(-50%,100%)!important");
+}
+
+.example-enter.example-enter-active {
+  opacity: .1;
+  @include transform("translate(-50%,-50%)!important");
+  transition: opacity 500ms ease-in;
+}
+
+// .example-leave {
+//   opacity: 0;
+// }
+//
+// .example-leave.example-leave-active {
+//   opacity: .5;
+//   transition: opacity 500ms ease-in;
+// }
+//
+.slide-appear {
+  opacity: 1;
+  @include transform("translate(-50%,150%) !important")
+}
+
+.slide-appear.slide-appear-active {
+  opacity: 1;
+  transition: all 750ms ease-in-out;
+  @include transform("translate(-50%,-50%) !important");
+}

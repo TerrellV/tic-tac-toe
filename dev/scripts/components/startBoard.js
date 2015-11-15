@@ -1,7 +1,7 @@
 import React from "react";
 import {BoardStore} from "../stores/BoardStore.js";
 import {BoardActions} from "../actions/BoardActions.js";
-
+import ReactCSSTransitionGroup from "../../../node_modules/react/lib/ReactCSSTransitionGroup.js";
 let StartBoard = React.createClass({
   getInitialState: function() {
     return {};
@@ -13,24 +13,31 @@ let StartBoard = React.createClass({
     let {pathObj,boxes,boardToShow,gameSigns} = this.props.storeData;
     let activeStatus = (gameSigns.user === 'x')? "x-active": "o-active";
     return (
-      <div className="board start mdl-shadow--8dp">
-        <div className={"board-options " + activeStatus}>
-          <div className="options" id="option-x" onClick={this.handleClick.bind(this,"x")}>
-            <svg className="mark-icon">
-              <use xlinkHref={"#x-mark"}></use>
-            </svg>
+      <ReactCSSTransitionGroup
+      transitionName="example"
+      transitionLeaveTimeout={1000}
+      transitionEnterTimeout={1000}
+      transitionAppear={true}
+      transitionAppearTimeout={300}>
+        <div id="options-board" className="board mdl-shadow--8dp">
+          <div className={"board-options " + activeStatus}>
+            <div className="options" id="option-x" onClick={this.handleClick.bind(this,"x")}>
+              <svg className="mark-icon">
+                <use xlinkHref={"#x-mark"}></use>
+              </svg>
+            </div>
+            <div className="options" id="option-o" onClick={this.handleClick.bind(this,"o")}>
+              <svg className="mark-icon">
+                <use xlinkHref={"#o-mark"}></use>
+              </svg>
+            </div>
           </div>
-          <div className="options" id="option-o" onClick={this.handleClick.bind(this,"o")}>
-            <svg className="mark-icon">
-              <use xlinkHref={"#o-mark"}></use>
-            </svg>
+          <div id="text-container">
+            <p id="text">Choose Your Mark</p>
           </div>
         </div>
-        <div id="text-container">
-          <p id="text">Choose Your Mark</p>
-        </div>
-      </div>
-    )
+      </ReactCSSTransitionGroup>
+     )
   }
 });
 
