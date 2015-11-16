@@ -146,7 +146,6 @@ header{
                 @include transition("all 500ms ease");
               }
               .pannel-text {
-                margin: 0px;
                 @include center-me-horiz();
                 bottom: 10%;
                 font-family: "Roboto", sans-serif;
@@ -276,38 +275,55 @@ header{
         #results-board {
           background-color: $dark;
         }
-
       }
     }
-    .reset-btn {
-      background-color: transparent;
-      position: absolute;
-      box-sizing: border-box;
-      bottom: 30px;
-      width: 200px;
-      height: 50px;
-      text-align: center;
-      outline: none;
-      border: 2px solid $teal;
-      z-index: 2;
-      border-radius: 100px;
+    #nav-buttons {
       @include center-me-horiz();
-      @include transition("all 500ms ease-in-out");
-      &.fill {
+      width: 180px;
+      height: 60px;
+      bottom: 7%;
+      .reset-btn {
+        vertical-align: middle;
+        position: relative;
         background-color: $teal;
-        #reset-btn-text {
-          color: white;
+        box-sizing: border-box;
+        display: inline-block;
+        width: 60px;
+        height: 60px;
+        text-align: center;
+        outline: none;
+        z-index: 2;
+        border-radius: 100px;
+        border: none;
+        @include transition("all 500ms ease-in-out");
+        #forward-icon {
+          @include center-me();
+          height: 30px;
+          width: 30px;
+          fill: $white;
+        }
+        #replay-icon {
+          @include center-me();
+          height: 30px;
+          width: 30px;
+          fill: $white;
         }
       }
-      #reset-btn-text {
-        color: $teal;
-        font-size: 1.25em;
-        font-family: "Roboto",sans-serif;
-        font-weight: 300;
-        line-height: 48px;
+      #home-button {
+        margin: 0px 20px;
+        position: relative;
         display: inline-block;
-        letter-spacing: 1px;
-        margin-bottom: 0px;
+        height: 60px;
+        width: 60px;
+        border: none;
+        outline: none;
+        border-radius: 50%;
+        background-color: $teal;
+        #home-icon {
+          fill: $white;
+          height: 30px;
+          width: 30px;
+        }
       }
     }
   }

@@ -45,7 +45,6 @@ let gameSigns = {
 }
 let corners = ["tl","tr","bl","br"];
 let middleEdges = ["tm","ml","mr","bm"];
-let showingResults = false;
 let boardToShow = "start";
 
 /* ALL COMPUTER LOGIC PSEUDO CODE
@@ -145,7 +144,7 @@ function updateComputerPick(boxToMark){
 function addOneToMarkCountForEachPath(boxObj) {
   boxObj.paths.map( path => { pathObj[path].marks++ } )
 }
-function resetStore(){
+function resetGameBoard(){
   boardToShow = "board";
   boxes.map( obj => {
     obj.checked = false;
@@ -153,6 +152,11 @@ function resetStore(){
     return obj;
   });
   Object.keys(pathObj).map( path => {pathObj[path].marks = 0});
+}
+function goHomeResetBoard(){
+  // not resetting everything
+  resetGameBoard();
+  showBoard("start");
 }
 function showWinningBoxes(row,resolve,reject){
   if (row) {
@@ -174,9 +178,6 @@ function showBoard( board ){
   boardToShow = board;
 }
 
-function toggleResults(){
-  boardToShow = "results";
-}
 
 /*///////////////////////////////
   function for checking the state
@@ -279,7 +280,7 @@ let BoardStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT,callback)
   },
   getState: function() {
-    return { pathObj, boxes, corners, middleEdges, gameSigns, showingResults, boardToShow, difficulties, difficulty}
+    return { pathObj, boxes, corners, middleEdges, gameSigns, boardToShow, difficulties, difficulty}
   }
 });
 
@@ -331,8 +332,11 @@ AppDispatcher.register(function(payload) {
       });
       break;
     case "resetBoard":
-      resetStore();
-      showingResults = false;
+      resetGameBoard();
+      BoardStore.emitChange();
+      break;
+    case "goHome":
+      goHomeResetBoard();
       BoardStore.emitChange();
       break;
     default: console.log("Action not recognized by BoardStore or logic fell through");

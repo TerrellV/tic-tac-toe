@@ -44,6 +44,12 @@ let BoardActions = {
       actionType: "resetBoard",
       data
     });
+  },
+  goHome: function(data){
+    AppDispatcher.handleViewAction({
+      actionType: "goHome",
+      data
+    });
   }
 }
 

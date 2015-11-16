@@ -14,11 +14,11 @@ let StartBoard = React.createClass({
     let activeStatus = (gameSigns.user === 'x')? "x-active": "o-active";
     return (
       <ReactCSSTransitionGroup
-      transitionName="example"
+      transitionName="start"
       transitionLeaveTimeout={1000}
       transitionEnterTimeout={1000}
       transitionAppear={true}
-      transitionAppearTimeout={300}>
+      transitionAppearTimeout={750}>
         <div id="options-board" className="board mdl-shadow--8dp">
           <div className={"board-options " + activeStatus}>
             <div className="options" id="option-x" onClick={this.handleClick.bind(this,"x")}>

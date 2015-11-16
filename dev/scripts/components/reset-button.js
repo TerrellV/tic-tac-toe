@@ -8,41 +8,57 @@ let ResetButton = React.createClass({
       loading: true,
     }
   },
-  handleClick: function( action, data ) {
+  handleClick: function( action, data, event ) {
     let actions = [
       {name:"reset", fn:BoardActions.resetBoard},
       {name:"chooseDifficulty", fn:BoardActions.showDifficultyBoard},
-      {name:"start", fn:BoardActions.startBoard.bind(this,200)}
+      {name:"start", fn:BoardActions.startBoard.bind(this,200)},
+      {name:"go-home", fn:BoardActions.goHome}
     ];
     actions.filter( actObj => actObj.name === action)[0].fn();
   },
   render: function(){
+    let buttonToShow;
     if (this.props.storeData.boardToShow === "start") {
-      return (
-        <div>
-          <button className="reset-btn" onClick={this.handleClick.bind(this,"chooseDifficulty")}>
-            <p id="reset-btn-text">Next</p>
+      buttonToShow = (
+          <button className="reset-btn mdl-shadow--4dp" onClick={this.handleClick.bind(this,"chooseDifficulty")}>
+            <svg id="forward-icon">
+              <use xlinkHref={"#forward-icon"}></use>
+            </svg>
           </button>
-        </div>
       )
     }
     else if (this.props.storeData.boardToShow === "difficulty"){
-      return (
-        <div>
-          <button className="reset-btn fill" onClick={this.handleClick.bind(this,"reset")}>
-            <p id="reset-btn-text">Start</p>
+      buttonToShow = (
+          <button className="reset-btn mdl-shadow--4dp" onClick={this.handleClick.bind(this,"reset")}>
+            <svg id="forward-icon">
+              <use xlinkHref={"#forward-icon"}></use>
+            </svg>
           </button>
-        </div>
       )
     } else {
-      return (
-        <div>
-          <button className="reset-btn fill" onClick={this.handleClick.bind(this,"reset")}>
-            <p id="reset-btn-text">Reset</p>
+      buttonToShow = (
+          <button className="reset-btn mdl-shadow--4dp" onClick={this.handleClick.bind(this,"reset")}>
+            <svg id="replay-icon">
+              <use xlinkHref={"#replay-icon"}></use>
+            </svg>
           </button>
-        </div>
       )
     }
+
+  return (
+    <div id="nav-buttons">
+      <button id="home-button" className="mdl-shadow--4dp"
+      onClick={this.handleClick.bind(this,"go-home")}>
+        <svg id="home-icon">
+          <use xlinkHref={"#home-icon"}></use>
+        </svg>
+      </button>
+      {buttonToShow}
+    </div>
+  )
+
+
   }
 })
 

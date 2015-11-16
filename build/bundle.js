@@ -51,6 +51,12 @@ var BoardActions = {
       actionType: "resetBoard",
       data: data
     });
+  },
+  goHome: function goHome(data) {
+    _dispatcherAppDispatcherJs.AppDispatcher.handleViewAction({
+      actionType: "goHome",
+      data: data
+    });
   }
 };
 
@@ -456,56 +462,61 @@ var ResetButton = _react2["default"].createClass({
       loading: true
     };
   },
-  handleClick: function handleClick(action, data) {
-    var actions = [{ name: "reset", fn: _actionsBoardActionsJs.BoardActions.resetBoard }, { name: "chooseDifficulty", fn: _actionsBoardActionsJs.BoardActions.showDifficultyBoard }, { name: "start", fn: _actionsBoardActionsJs.BoardActions.startBoard.bind(this, 200) }];
+  handleClick: function handleClick(action, data, event) {
+    var actions = [{ name: "reset", fn: _actionsBoardActionsJs.BoardActions.resetBoard }, { name: "chooseDifficulty", fn: _actionsBoardActionsJs.BoardActions.showDifficultyBoard }, { name: "start", fn: _actionsBoardActionsJs.BoardActions.startBoard.bind(this, 200) }, { name: "go-home", fn: _actionsBoardActionsJs.BoardActions.goHome }];
     actions.filter(function (actObj) {
       return actObj.name === action;
     })[0].fn();
   },
   render: function render() {
+    var buttonToShow = undefined;
     if (this.props.storeData.boardToShow === "start") {
-      return _react2["default"].createElement(
-        "div",
-        null,
+      buttonToShow = _react2["default"].createElement(
+        "button",
+        { className: "reset-btn mdl-shadow--4dp", onClick: this.handleClick.bind(this, "chooseDifficulty") },
         _react2["default"].createElement(
-          "button",
-          { className: "reset-btn", onClick: this.handleClick.bind(this, "chooseDifficulty") },
-          _react2["default"].createElement(
-            "p",
-            { id: "reset-btn-text" },
-            "Next"
-          )
+          "svg",
+          { id: "forward-icon" },
+          _react2["default"].createElement("use", { xlinkHref: "#forward-icon" })
         )
       );
     } else if (this.props.storeData.boardToShow === "difficulty") {
-      return _react2["default"].createElement(
-        "div",
-        null,
+      buttonToShow = _react2["default"].createElement(
+        "button",
+        { className: "reset-btn mdl-shadow--4dp", onClick: this.handleClick.bind(this, "reset") },
         _react2["default"].createElement(
-          "button",
-          { className: "reset-btn fill", onClick: this.handleClick.bind(this, "reset") },
-          _react2["default"].createElement(
-            "p",
-            { id: "reset-btn-text" },
-            "Start"
-          )
+          "svg",
+          { id: "forward-icon" },
+          _react2["default"].createElement("use", { xlinkHref: "#forward-icon" })
         )
       );
     } else {
-      return _react2["default"].createElement(
-        "div",
-        null,
+      buttonToShow = _react2["default"].createElement(
+        "button",
+        { className: "reset-btn mdl-shadow--4dp", onClick: this.handleClick.bind(this, "reset") },
         _react2["default"].createElement(
-          "button",
-          { className: "reset-btn fill", onClick: this.handleClick.bind(this, "reset") },
-          _react2["default"].createElement(
-            "p",
-            { id: "reset-btn-text" },
-            "Reset"
-          )
+          "svg",
+          { id: "replay-icon" },
+          _react2["default"].createElement("use", { xlinkHref: "#replay-icon" })
         )
       );
     }
+
+    return _react2["default"].createElement(
+      "div",
+      { id: "nav-buttons" },
+      _react2["default"].createElement(
+        "button",
+        { id: "home-button", className: "mdl-shadow--4dp",
+          onClick: this.handleClick.bind(this, "go-home") },
+        _react2["default"].createElement(
+          "svg",
+          { id: "home-icon" },
+          _react2["default"].createElement("use", { xlinkHref: "#home-icon" })
+        )
+      ),
+      buttonToShow
+    );
   }
 });
 
@@ -604,11 +615,11 @@ var StartBoard = _react2["default"].createClass({
     return _react2["default"].createElement(
       _node_modulesReactLibReactCSSTransitionGroupJs2["default"],
       {
-        transitionName: "example",
+        transitionName: "start",
         transitionLeaveTimeout: 1000,
         transitionEnterTimeout: 1000,
         transitionAppear: true,
-        transitionAppearTimeout: 300 },
+        transitionAppearTimeout: 750 },
       _react2["default"].createElement(
         "div",
         { id: "options-board", className: "board mdl-shadow--8dp" },
@@ -742,7 +753,6 @@ var gameSigns = {
 };
 var corners = ["tl", "tr", "bl", "br"];
 var middleEdges = ["tm", "ml", "mr", "bm"];
-var showingResults = false;
 var boardToShow = "start";
 
 /* ALL COMPUTER LOGIC PSEUDO CODE
@@ -855,7 +865,7 @@ function addOneToMarkCountForEachPath(boxObj) {
     pathObj[path].marks++;
   });
 }
-function resetStore() {
+function resetGameBoard() {
   boardToShow = "board";
   boxes.map(function (obj) {
     obj.checked = false;
@@ -865,6 +875,11 @@ function resetStore() {
   Object.keys(pathObj).map(function (path) {
     pathObj[path].marks = 0;
   });
+}
+function goHomeResetBoard() {
+  // not resetting everything
+  resetGameBoard();
+  showBoard("start");
 }
 function showWinningBoxes(row, resolve, reject) {
   if (row) {
@@ -889,10 +904,6 @@ function assignMarks(userMarkPayload) {
 }
 function showBoard(board) {
   boardToShow = board;
-}
-
-function toggleResults() {
-  boardToShow = "results";
 }
 
 /*///////////////////////////////
@@ -1025,7 +1036,7 @@ var BoardStore = _objectAssign2["default"]({}, _events.EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
   getState: function getState() {
-    return { pathObj: pathObj, boxes: boxes, corners: corners, middleEdges: middleEdges, gameSigns: gameSigns, showingResults: showingResults, boardToShow: boardToShow, difficulties: difficulties, difficulty: difficulty };
+    return { pathObj: pathObj, boxes: boxes, corners: corners, middleEdges: middleEdges, gameSigns: gameSigns, boardToShow: boardToShow, difficulties: difficulties, difficulty: difficulty };
   }
 });
 
@@ -1078,8 +1089,11 @@ _dispatcherAppDispatcherJs.AppDispatcher.register(function (payload) {
       });
       break;
     case "resetBoard":
-      resetStore();
-      showingResults = false;
+      resetGameBoard();
+      BoardStore.emitChange();
+      break;
+    case "goHome":
+      goHomeResetBoard();
       BoardStore.emitChange();
       break;
     default:

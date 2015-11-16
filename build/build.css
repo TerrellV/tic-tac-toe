@@ -108,6 +108,23 @@
   -o-transform: translate(-50%,-50%) !important;
   transform: translate(-50%,-50%) !important; }
 
+.start-appear {
+  opacity: 0;
+  -webkit-transform: translate(-50%,-150%) !important;
+  -moz-transform: translate(-50%,-150%) !important;
+  -ms-transform: translate(-50%,-150%) !important;
+  -o-transform: translate(-50%,-150%) !important;
+  transform: translate(-50%,-150%) !important; }
+
+.start-appear.start-appear-active {
+  opacity: 1;
+  transition: all 750ms ease-in-out;
+  -webkit-transform: translate(-50%,-50%) !important;
+  -moz-transform: translate(-50%,-50%) !important;
+  -ms-transform: translate(-50%,-50%) !important;
+  -o-transform: translate(-50%,-50%) !important;
+  transform: translate(-50%,-50%) !important; }
+
 * {
   margin: 0px;
   padding: 0px; }
@@ -291,7 +308,6 @@ header {
               -o-transition: all 500ms ease;
               transition: all 500ms ease; }
             #main #app #board-container #master-board #difficulty-board .pannels .diff-pannel .pannel-text {
-              margin: 0px;
               position: absolute;
               left: 50%;
               -webkit-transform: translateX(-50%);
@@ -445,18 +461,7 @@ header {
                 animation: markBox 400ms ease-in-out!important; }
         #main #app #board-container #master-board #results-board {
           background-color: #222831; }
-    #main #app .reset-btn {
-      background-color: transparent;
-      position: absolute;
-      box-sizing: border-box;
-      bottom: 30px;
-      width: 200px;
-      height: 50px;
-      text-align: center;
-      outline: none;
-      border: 2px solid #00ADB5;
-      z-index: 2;
-      border-radius: 100px;
+    #main #app #nav-buttons {
       position: absolute;
       left: 50%;
       -webkit-transform: translateX(-50%);
@@ -464,24 +469,65 @@ header {
       -ms-transform: translateX(-50%);
       -o-transform: translateX(-50%);
       transform: translateX(-50%);
-      -webkit-transition: all 500ms ease-in-out;
-      -moz-transition: all 500ms ease-in-out;
-      -ms-transition: all 500ms ease-in-out;
-      -o-transition: all 500ms ease-in-out;
-      transition: all 500ms ease-in-out; }
-      #main #app .reset-btn.fill {
-        background-color: #00ADB5; }
-        #main #app .reset-btn.fill #reset-btn-text {
-          color: white; }
-      #main #app .reset-btn #reset-btn-text {
-        color: #00ADB5;
-        font-size: 1.25em;
-        font-family: "Roboto",sans-serif;
-        font-weight: 300;
-        line-height: 48px;
+      width: 180px;
+      height: 60px;
+      bottom: 7%; }
+      #main #app #nav-buttons .reset-btn {
+        vertical-align: middle;
+        position: relative;
+        background-color: #00ADB5;
+        box-sizing: border-box;
         display: inline-block;
-        letter-spacing: 1px;
-        margin-bottom: 0px; }
+        width: 60px;
+        height: 60px;
+        text-align: center;
+        outline: none;
+        z-index: 2;
+        border-radius: 100px;
+        border: none;
+        -webkit-transition: all 500ms ease-in-out;
+        -moz-transition: all 500ms ease-in-out;
+        -ms-transition: all 500ms ease-in-out;
+        -o-transition: all 500ms ease-in-out;
+        transition: all 500ms ease-in-out; }
+        #main #app #nav-buttons .reset-btn #forward-icon {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          -webkit-transform: translate(-50%,-50%);
+          -moz-transform: translate(-50%,-50%);
+          -ms-transform: translate(-50%,-50%);
+          -o-transform: translate(-50%,-50%);
+          transform: translate(-50%,-50%);
+          height: 30px;
+          width: 30px;
+          fill: #EEEEEE; }
+        #main #app #nav-buttons .reset-btn #replay-icon {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          -webkit-transform: translate(-50%,-50%);
+          -moz-transform: translate(-50%,-50%);
+          -ms-transform: translate(-50%,-50%);
+          -o-transform: translate(-50%,-50%);
+          transform: translate(-50%,-50%);
+          height: 30px;
+          width: 30px;
+          fill: #EEEEEE; }
+      #main #app #nav-buttons #home-button {
+        margin: 0px 20px;
+        position: relative;
+        display: inline-block;
+        height: 60px;
+        width: 60px;
+        border: none;
+        outline: none;
+        border-radius: 50%;
+        background-color: #00ADB5; }
+        #main #app #nav-buttons #home-button #home-icon {
+          fill: #EEEEEE;
+          height: 30px;
+          width: 30px; }
 
 .dark-box {
   background-color: #e7e7e7; }
