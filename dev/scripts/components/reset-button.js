@@ -30,7 +30,7 @@ let ResetButton = React.createClass({
     }
     else if (this.props.storeData.boardToShow === "difficulty"){
       buttonToShow = (
-          <button className="reset-btn mdl-shadow--4dp" onClick={this.handleClick.bind(this,"reset")}>
+          <button className="reset-btn mdl-shadow--4dp" onClick={this.handleClick.bind(this,"start")}>
             <svg id="forward-icon">
               <use xlinkHref={"#forward-icon"}></use>
             </svg>

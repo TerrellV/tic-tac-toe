@@ -28,6 +28,12 @@ var BoardActions = {
       data: data
     });
   },
+  delayClick: function delayClick(data) {
+    _dispatcherAppDispatcherJs.AppDispatcher.handleViewAction({
+      actionType: "delayClick",
+      data: data
+    });
+  },
   makeUserChoice: function makeUserChoice(data) {
     _dispatcherAppDispatcherJs.AppDispatcher.handleViewAction({
       actionType: "makeUserChoice",
@@ -112,6 +118,7 @@ var App = _react2["default"].createClass({
     );
   },
   _onMark: function _onMark() {
+    console.log("-------- storeData Updated ... Change REgistered");
     this.setState({ storeData: this.getStoreData() });
   },
   _remove: function _remove() {
@@ -212,13 +219,23 @@ var Box = _react2["default"].createClass({
   },
   handleClick: function handleClick(data) {
     if (this.props.boxInfo.checked === false) {
-
-      data.boxInfo = this.props.boxInfo;
-      // make the user choice
-      _actionsBoardActionsJs.BoardActions.makeUserChoice(data);
-      // delay 1 second and make the computer choice
-      // disable board while waiting
-      window.setTimeout(_actionsBoardActionsJs.BoardActions.makeComputerChoice.bind(this, data), 500);
+      // check if board is still animating
+      if (this.props.storeData.gameBoardStillAnimating === false) {
+        _actionsBoardActionsJs.BoardActions.delayClick(1100);
+        data.boxInfo = this.props.boxInfo;
+        // make the user choice
+        _actionsBoardActionsJs.BoardActions.makeUserChoice(data);
+        debugger;
+        var doesWinningRowExist = this.props.storeData.check4Winner();
+        if (doesWinningRowExist) {
+          console.log('winner');
+          // fire action to highlight-boxes
+          // then fire action to show the results .. or make the results board appar
+        } else {
+            // if user didn't win delay 1/2 second and make the computer choice
+            window.setTimeout(_actionsBoardActionsJs.BoardActions.makeComputerChoice.bind(this, data), 500);
+          }
+      }
     } else {
       console.error("BOX IS ALREADY CHECKED");
     }
@@ -483,7 +500,7 @@ var ResetButton = _react2["default"].createClass({
     } else if (this.props.storeData.boardToShow === "difficulty") {
       buttonToShow = _react2["default"].createElement(
         "button",
-        { className: "reset-btn mdl-shadow--4dp", onClick: this.handleClick.bind(this, "reset") },
+        { className: "reset-btn mdl-shadow--4dp", onClick: this.handleClick.bind(this, "start") },
         _react2["default"].createElement(
           "svg",
           { id: "forward-icon" },
@@ -754,6 +771,8 @@ var gameSigns = {
 var corners = ["tl", "tr", "bl", "br"];
 var middleEdges = ["tm", "ml", "mr", "bm"];
 var boardToShow = "start";
+var gameBoardStillAnimating = false;
+var winnerFound = false;
 
 /* ALL COMPUTER LOGIC PSEUDO CODE
 
@@ -807,7 +826,7 @@ function computerLogicEasy(payload) {
   // if the offensive win is open, take it
   // else, pick a randome open box
   var boardCheck = evaluateForTwoInPath();
-  return boardCheck.moveType === "computerWin" ? boardCheck.mov : getRandomOpenBox();
+  return boardCheck.moveType === "computerWin" ? boardCheck.move : getRandomOpenBox();
 }
 function computerLogicRegular(payload) {
   // make the defensive move
@@ -860,12 +879,21 @@ function updateComputerPick(boxToMark) {
   boxObj.markedColorClass = "grey-box";
   addOneToMarkCountForEachPath(boxObj);
 }
+function waitForAnimationToFinish(payload, resolve, reject) {
+  var delay = payload.action.data;
+  gameBoardStillAnimating = true;
+  window.setTimeout(function (a) {
+    resolve(false);
+  }, delay);
+}
 function addOneToMarkCountForEachPath(boxObj) {
   boxObj.paths.map(function (path) {
     pathObj[path].marks++;
   });
 }
 function resetGameBoard() {
+  console.log("resetting gameboard");
+  winnerFound = false;
   boardToShow = "board";
   boxes.map(function (obj) {
     obj.checked = false;
@@ -878,21 +906,20 @@ function resetGameBoard() {
 }
 function goHomeResetBoard() {
   // not resetting everything
+  console.log('going home');
+  winnerFound = false;
   resetGameBoard();
   showBoard("start");
 }
-function showWinningBoxes(row, resolve, reject) {
-  if (row) {
-    window.setTimeout(function (a) {
-      boardToShow = "results";
-      resolve(boardToShow);
-    }, 2000);
-    pathObj[row].layout.map(function (box) {
-      getBoxObj(box).markedColorClass = "highlight-box";
-    });
-  } else {
-    reject("No winner");
-  }
+function delayShowResults(winningRow, resolve, reject) {
+  // wait 2 seconds after the win then show the results board;
+  window.setTimeout(function (a) {
+    boardToShow = "results";
+    resolve(true);
+  }, 2000);
+  pathObj[winningRow].layout.map(function (box) {
+    getBoxObj(box).markedColorClass = "highlight-box";
+  });
 }
 function assignMarks(userMarkPayload) {
   var _userMarkPayload$action = userMarkPayload.action;
@@ -910,7 +937,7 @@ function showBoard(board) {
   function for checking the state
  ///////////////////////////////*/
 
-function checkForWinner() {
+function check4Winner() {
   var isStreak = Object.keys(pathObj).map(function (path) {
     if (pathObj[path].marks === 3) {
       var test = pathObj[path].layout.map(function (box) {
@@ -1036,7 +1063,7 @@ var BoardStore = _objectAssign2["default"]({}, _events.EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
   getState: function getState() {
-    return { pathObj: pathObj, boxes: boxes, corners: corners, middleEdges: middleEdges, gameSigns: gameSigns, boardToShow: boardToShow, difficulties: difficulties, difficulty: difficulty };
+    return { pathObj: pathObj, boxes: boxes, corners: corners, middleEdges: middleEdges, gameSigns: gameSigns, boardToShow: boardToShow, difficulties: difficulties, difficulty: difficulty, gameBoardStillAnimating: gameBoardStillAnimating, winnerFound: winnerFound, check4Winner: check4Winner };
   }
 });
 
@@ -1063,16 +1090,17 @@ _dispatcherAppDispatcherJs.AppDispatcher.register(function (payload) {
       showBoard('board');
       BoardStore.emitChange();
       break;
+    case "delayClick":
+      var prom = new Promise(waitForAnimationToFinish.bind(this, payload));
+      BoardStore.emitChange();
+      prom.then(function (resolved) {
+        gameBoardStillAnimating = resolved;
+        BoardStore.emitChange();
+      });
+      break;
     case "makeUserChoice":
       updateUserPick(payload);
       BoardStore.emitChange();
-      var p1 = new Promise(showWinningBoxes.bind(this, checkForWinner()));
-      BoardStore.emitChange(); // emitting for purpose of highlights
-      p1.then(function (result) {
-        BoardStore.emitChange();
-      }, function (error) {
-        console.log(error);
-      });
       break;
     case "makeComputerChoice":
       // sets computer choice to necessary function result based on what difficult is set and its preset function defined in the state ...
@@ -1080,13 +1108,7 @@ _dispatcherAppDispatcherJs.AppDispatcher.register(function (payload) {
         return diffs.type === difficulty;
       })[0].fn(payload);
       updateComputerPick(compChoice);
-      var p2 = new Promise(showWinningBoxes.bind(this, checkForWinner()));
-      BoardStore.emitChange(); // emitting for purpose of highlights
-      p2.then(function (result) {
-        BoardStore.emitChange();
-      }, function (error) {
-        console.log(error);
-      });
+      BoardStore.emitChange();
       break;
     case "resetBoard":
       resetGameBoard();

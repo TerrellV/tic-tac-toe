@@ -46,6 +46,8 @@ let gameSigns = {
 let corners = ["tl","tr","bl","br"];
 let middleEdges = ["tm","ml","mr","bm"];
 let boardToShow = "start";
+let gameBoardStillAnimating = false;
+let winnerFound = false;
 
 /* ALL COMPUTER LOGIC PSEUDO CODE
 
@@ -95,7 +97,7 @@ function computerLogicEasy(payload) {
   // if the offensive win is open, take it
   // else, pick a randome open box
   let boardCheck = evaluateForTwoInPath();
-  return (boardCheck.moveType === "computerWin")? boardCheck.mov : getRandomOpenBox();
+  return (boardCheck.moveType === "computerWin")? boardCheck.move : getRandomOpenBox();
 }
 function computerLogicRegular(payload) {
   // make the defensive move
@@ -141,10 +143,19 @@ function updateComputerPick(boxToMark){
   boxObj.markedColorClass = "grey-box";
   addOneToMarkCountForEachPath(boxObj);
 }
+function waitForAnimationToFinish (payload, resolve, reject) {
+  let delay = payload.action.data;
+  gameBoardStillAnimating = true;
+  window.setTimeout( a => {
+    resolve(false);
+  },delay);
+}
 function addOneToMarkCountForEachPath(boxObj) {
   boxObj.paths.map( path => { pathObj[path].marks++ } )
 }
 function resetGameBoard(){
+  console.log("resetting gameboard");
+  winnerFound = false;
   boardToShow = "board";
   boxes.map( obj => {
     obj.checked = false;
@@ -155,19 +166,18 @@ function resetGameBoard(){
 }
 function goHomeResetBoard(){
   // not resetting everything
+  console.log('going home');
+  winnerFound = false;
   resetGameBoard();
   showBoard("start");
 }
-function showWinningBoxes(row,resolve,reject){
-  if (row) {
-    window.setTimeout( a => {
-      boardToShow = "results";
-      resolve(boardToShow);
-    },2000);
-    pathObj[row].layout.map(box => { getBoxObj(box).markedColorClass = "highlight-box"})
-  } else {
-    reject("No winner")
-  }
+function delayShowResults(winningRow,resolve,reject){
+  // wait 2 seconds after the win then show the results board;
+  window.setTimeout( a => {
+    boardToShow = "results";
+    resolve(true);
+  },2000);
+  pathObj[winningRow].layout.map(box => { getBoxObj(box).markedColorClass = "highlight-box"});
 }
 function assignMarks(userMarkPayload) {
   let { action:{data,actionType} } = userMarkPayload;
@@ -183,7 +193,7 @@ function showBoard( board ){
   function for checking the state
  ///////////////////////////////*/
 
-function checkForWinner(){
+function check4Winner(){
   let isStreak = Object.keys(pathObj).map( path => {
     if (pathObj[path].marks === 3 ) {
       let test = pathObj[path].layout.map( box => getBoxObj(box).mark)
@@ -280,7 +290,7 @@ let BoardStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT,callback)
   },
   getState: function() {
-    return { pathObj, boxes, corners, middleEdges, gameSigns, boardToShow, difficulties, difficulty}
+    return { pathObj, boxes, corners, middleEdges, gameSigns, boardToShow, difficulties, difficulty, gameBoardStillAnimating, winnerFound, check4Winner}
   }
 });
 
@@ -308,28 +318,23 @@ AppDispatcher.register(function(payload) {
       showBoard('board');
       BoardStore.emitChange();
       break;
+    case "delayClick" :
+      let prom = new Promise( waitForAnimationToFinish.bind(this,payload) );
+      BoardStore.emitChange();
+      prom.then( resolved => {
+        gameBoardStillAnimating = resolved;
+        BoardStore.emitChange();
+      });
+      break;
     case "makeUserChoice" :
       updateUserPick(payload);
       BoardStore.emitChange();
-      let p1 = new Promise( showWinningBoxes.bind(this,checkForWinner()));
-      BoardStore.emitChange(); // emitting for purpose of highlights
-      p1.then( result => {
-        BoardStore.emitChange();
-      }, error => {
-        console.log(error)
-      });
       break;
     case "makeComputerChoice":
       // sets computer choice to necessary function result based on what difficult is set and its preset function defined in the state ...
-      let compChoice = difficulties.filter( diffs => diffs.type === difficulty)[0].fn(payload);
+      let compChoice = difficulties.filter( diffs => diffs.type === difficulty )[0].fn(payload);
       updateComputerPick(compChoice);
-      let p2 = new Promise( showWinningBoxes.bind(this,checkForWinner()));
-      BoardStore.emitChange(); // emitting for purpose of highlights
-      p2.then( result => {
-        BoardStore.emitChange();
-      }, error => {
-        console.log(error)
-      });
+      BoardStore.emitChange();
       break;
     case "resetBoard":
       resetGameBoard();

@@ -7,14 +7,24 @@ let Box = React.createClass({
     return {loading: true}
   },
   handleClick: function(data){
-    if (this.props.boxInfo.checked === false){
-
-      data.boxInfo = this.props.boxInfo;
-      // make the user choice
-      BoardActions.makeUserChoice(data);
-      // delay 1 second and make the computer choice
-      // disable board while waiting
-      window.setTimeout(BoardActions.makeComputerChoice.bind(this,data), 500);
+    if ( this.props.boxInfo.checked === false){
+      // check if board is still animating
+      if (this.props.storeData.gameBoardStillAnimating === false) {
+        BoardActions.delayClick(1100);
+        data.boxInfo = this.props.boxInfo;
+        // make the user choice
+        BoardActions.makeUserChoice(data);
+        debugger;
+        let doesWinningRowExist = this.props.storeData.check4Winner();
+        if(doesWinningRowExist){
+          console.log('winner');
+          // fire action to highlight-boxes
+          // then fire action to show the results .. or make the results board appar
+        } else {
+          // if user didn't win delay 1/2 second and make the computer choice
+          window.setTimeout(BoardActions.makeComputerChoice.bind(this,data), 500);
+        }
+      }
 
     } else {console.error("BOX IS ALREADY CHECKED")}
   },

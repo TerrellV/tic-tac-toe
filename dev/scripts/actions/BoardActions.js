@@ -21,6 +21,12 @@ let BoardActions = {
       data
     });
   },
+  delayClick: function(data){
+    AppDispatcher.handleViewAction({
+      actionType: "delayClick",
+      data
+    });
+  },
   makeUserChoice: function(data){
     AppDispatcher.handleViewAction({
       actionType: "makeUserChoice",

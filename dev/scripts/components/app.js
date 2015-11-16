@@ -32,6 +32,7 @@ let App = React.createClass({
     )
   },
   _onMark: function(){
+    console.log("-------- storeData Updated ... Change Registered");
     this.setState({storeData : this.getStoreData()});
   },
   _remove: function(){
