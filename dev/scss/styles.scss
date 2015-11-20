@@ -276,7 +276,6 @@ header{
           background-color: $light-box;
           #text-container {
             @include center-me();
-            width: 45%;
             #results-text {
               text-align: center;
               font-family: "Roboto", sans-serif;
@@ -290,6 +289,7 @@ header{
               color: $teal;
               text-align: center;
               font-family: "Roboto", sans-serif;
+              cursor: pointer;
             }
           }
         }
@@ -297,10 +297,11 @@ header{
     }
     #nav-buttons {
       @include center-me-horiz();
-      width: 180px;
+      width: 240px;
       height: 60px;
       bottom: 7%;
       .reset-btn {
+        cursor: pointer;
         vertical-align: middle;
         position: relative;
         background-color: $teal;
@@ -328,7 +329,8 @@ header{
         }
       }
       #home-button {
-        margin: 0px 20px;
+        cursor: pointer;
+        margin: 0px 40px;
         position: relative;
         display: inline-block;
         height: 60px;

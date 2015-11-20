@@ -1,56 +1,56 @@
-@media screen and (max-width: 800px) and (min-width: 500px){
-
-  header{
-    h1 {
-      font-size: 2em;
-    }
-  }
-  #main {
-    #app {
-      #board-container{
-        .board{
-          .inner-board {
-            .box {
-              .mark-box {
-                .mark-icon {
-                }
-              }
-            }
-          }
-        }
-      }
-      #reset-btn {
-        #reset-btn-text {
-          font-size: 2.25em
-        }
-      }
-    }
-  }
-}
-@media screen and (min-width: 801px){
+@media screen and (min-width: 715px){
 
   header{
     h1 {
       font-size: 3em;
     }
   }
-  #main {
-    #app {
+  #main{
+    #app{
       #board-container{
-        .board{
-          .inner-board {
-            .box {
-              .mark-box {
-                .mark-icon {
+        #master-board{
+          .board{
+
+          }
+          #options-board{
+            #text-container{
+              #text{
+                font-size: 22px;
+              }
+            }
+          }
+          #difficulty-board{
+            .pannels{
+              .diff-pannel{
+                .pannel-text{
+                  font-size: 18px;
                 }
+              }
+            }
+            #text-container{
+              #text{
+                font-size: 22px;
+              }
+            }
+          }
+          #game-board {
+
+          }
+          #results-board{
+            #text-container{
+              #results-text{
+                font-size: 45px;
               }
             }
           }
         }
       }
-      #reset-btn {
-        #reset-btn-text {
-          font-size: 2.55em
+      #nav-buttons{
+        .reset-btn{
+
+        }
+        #home-button{
+
         }
       }
     }

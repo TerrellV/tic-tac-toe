@@ -469,8 +469,7 @@ header {
             -moz-transform: translate(-50%,-50%);
             -ms-transform: translate(-50%,-50%);
             -o-transform: translate(-50%,-50%);
-            transform: translate(-50%,-50%);
-            width: 45%; }
+            transform: translate(-50%,-50%); }
             #main #app #board-container #master-board #results-board #text-container #results-text {
               text-align: center;
               font-family: "Roboto", sans-serif;
@@ -482,7 +481,8 @@ header {
             #main #app #board-container #master-board #results-board #text-container #play-again-text {
               color: #00ADB5;
               text-align: center;
-              font-family: "Roboto", sans-serif; }
+              font-family: "Roboto", sans-serif;
+              cursor: pointer; }
     #main #app #nav-buttons {
       position: absolute;
       left: 50%;
@@ -491,10 +491,11 @@ header {
       -ms-transform: translateX(-50%);
       -o-transform: translateX(-50%);
       transform: translateX(-50%);
-      width: 180px;
+      width: 240px;
       height: 60px;
       bottom: 7%; }
       #main #app #nav-buttons .reset-btn {
+        cursor: pointer;
         vertical-align: middle;
         position: relative;
         background-color: #00ADB5;
@@ -537,7 +538,8 @@ header {
           width: 30px;
           fill: #EEEEEE; }
       #main #app #nav-buttons #home-button {
-        margin: 0px 20px;
+        cursor: pointer;
+        margin: 0px 40px;
         position: relative;
         display: inline-block;
         height: 60px;
@@ -571,17 +573,17 @@ header {
   -o-transition: all 1s ease;
   transition: all 1s ease; }
 
-@media screen and (max-width: 800px) and (min-width: 500px) {
-  header h1 {
-    font-size: 2em; }
-
-  #main #app #reset-btn #reset-btn-text {
-    font-size: 2.25em; } }
-@media screen and (min-width: 801px) {
+@media screen and (min-width: 715px) {
   header h1 {
     font-size: 3em; }
 
-  #main #app #reset-btn #reset-btn-text {
-    font-size: 2.55em; } }
+  #main #app #board-container #master-board #options-board #text-container #text {
+    font-size: 22px; }
+  #main #app #board-container #master-board #difficulty-board .pannels .diff-pannel .pannel-text {
+    font-size: 18px; }
+  #main #app #board-container #master-board #difficulty-board #text-container #text {
+    font-size: 22px; }
+  #main #app #board-container #master-board #results-board #text-container #results-text {
+    font-size: 45px; } }
 
 /*# sourceMappingURL=build.css.map */
