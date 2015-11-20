@@ -4,29 +4,46 @@ import {BoardActions} from "../actions/BoardActions.js";
 
 let Box = React.createClass({
   getInitialState: function(){
-    return {loading: true}
+    return {playing: true}
+  },
+  winnerActions: function(winningRow,winner){
+    // update the winner value in the store and halt any actions being fired by setting the playing variable in the store to false. The logic in handleclick relys on the true value of playing.
+
+    // create promise with highlight-boxes action
+    // change the state of the store to show winning board after highlight-boxes finishes
+
+    BoardActions.setWinner(winner);
+    BoardActions.highlight(winningRow);
   },
   handleClick: function(data){
-    if ( this.props.boxInfo.checked === false){
-      // check if board is still animating
-      if (this.props.storeData.gameBoardStillAnimating === false) {
-        BoardActions.delayClick(1100);
-        data.boxInfo = this.props.boxInfo;
-        // make the user choice
-        BoardActions.makeUserChoice(data);
-        debugger;
-        let doesWinningRowExist = this.props.storeData.check4Winner();
-        if(doesWinningRowExist){
-          console.log('winner');
-          // fire action to highlight-boxes
-          // then fire action to show the results .. or make the results board appar
-        } else {
-          // if user didn't win delay 1/2 second and make the computer choice
-          window.setTimeout(BoardActions.makeComputerChoice.bind(this,data), 500);
-        }
-      }
+    if (this.props.storeData.playing) {
+      if ( this.props.boxInfo.checked === false){
+        // check if board is still animating
+        if (this.props.storeData.gameBoardStillAnimating === false) {
+          BoardActions.delayClick(1100);
+          data.boxInfo = this.props.boxInfo;
+          // make the user choice
+          BoardActions.makeUserChoice(data);
 
-    } else {console.error("BOX IS ALREADY CHECKED")}
+          let winningRow = this.props.storeData.check4Winner();
+          if(winningRow){
+            this.winnerActions(winningRow,"user");
+          } else {
+            // if user didn't win delay 1/2 second and make the computer choice
+            window.setTimeout( function(){
+              BoardActions.makeComputerChoice(data);
+              let compWinningRow = this.props.storeData.check4Winner();
+              if (compWinningRow) {
+                this.winnerActions(compWinningRow,"computer");
+              }
+            }.bind(this), 500);
+            // check for winner again -
+
+          }
+        }
+
+      } else {console.error("BOX IS ALREADY CHECKED")}
+    } else {console.error("SOMEONE ALREADY WON")}
   },
   render: function(){
     // add a specific class to each box

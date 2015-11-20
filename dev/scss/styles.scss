@@ -273,7 +273,25 @@ header{
           }
         }
         #results-board {
-          background-color: $dark;
+          background-color: $light-box;
+          #text-container {
+            @include center-me();
+            width: 45%;
+            #results-text {
+              text-align: center;
+              font-family: "Roboto", sans-serif;
+              font-size: 30px;
+              font-weight: 600;
+              color: $dark;
+              padding-bottom:15px;
+              border-bottom: 2px solid $dark;
+            }
+            #play-again-text{
+              color: $teal;
+              text-align: center;
+              font-family: "Roboto", sans-serif;
+            }
+          }
         }
       }
     }

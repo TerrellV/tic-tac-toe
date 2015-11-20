@@ -39,6 +39,18 @@ let BoardActions = {
       data
     });
   },
+  setWinner: function(data){
+    AppDispatcher.handleViewAction({
+      actionType: "setWinner",
+      data
+    });
+  },
+  highlight: function(data){
+    AppDispatcher.handleViewAction({
+      actionType: "highlight",
+      data
+    });
+  },
   startBoard: function(data){
     AppDispatcher.handleViewAction({
       actionType: "startBoard",

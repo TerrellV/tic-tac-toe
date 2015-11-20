@@ -8,10 +8,18 @@ let ResultsBoard = React.createClass({
     return {};
   },
   handleClick: function(info) {
-    BoardActions.assignMarks(info)
+    BoardActions.resetBoard();
   },
   render: function() {
     let {pathObj,boxes,boardToShow,gameSigns} = this.props.storeData;
+    let outcome;
+    if (this.props.storeData.winner === "user") {
+      outcome = "You Won";
+    } else if (this.props.storeData.winner === "computer") {
+      outcome = "You Lost";
+    } else {
+      outcome = "Tie Game";
+    }
 
     return (
       <ReactCSSTransitionGroup
@@ -21,7 +29,10 @@ let ResultsBoard = React.createClass({
       transitionAppear={true}
       transitionAppearTimeout={2000}>
         <div id="results-board" className="board mdl-shadow--8dp" >
-          something
+          <div id="text-container">
+            <h2 id="results-text">{outcome}</h2>
+            <h4 id="play-again-text" onClick={this.handleClick}>Play Again</h4>
+          </div>
         </div>
       </ReactCSSTransitionGroup>
     )

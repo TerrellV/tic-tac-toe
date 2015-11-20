@@ -460,7 +460,29 @@ header {
                 -o-animation: markBox 400ms ease-in-out!important;
                 animation: markBox 400ms ease-in-out!important; }
         #main #app #board-container #master-board #results-board {
-          background-color: #222831; }
+          background-color: #F4F4F4; }
+          #main #app #board-container #master-board #results-board #text-container {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%,-50%);
+            -moz-transform: translate(-50%,-50%);
+            -ms-transform: translate(-50%,-50%);
+            -o-transform: translate(-50%,-50%);
+            transform: translate(-50%,-50%);
+            width: 45%; }
+            #main #app #board-container #master-board #results-board #text-container #results-text {
+              text-align: center;
+              font-family: "Roboto", sans-serif;
+              font-size: 30px;
+              font-weight: 600;
+              color: #222831;
+              padding-bottom: 15px;
+              border-bottom: 2px solid #222831; }
+            #main #app #board-container #master-board #results-board #text-container #play-again-text {
+              color: #00ADB5;
+              text-align: center;
+              font-family: "Roboto", sans-serif; }
     #main #app #nav-buttons {
       position: absolute;
       left: 50%;

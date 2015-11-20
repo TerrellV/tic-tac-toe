@@ -47,7 +47,8 @@ let corners = ["tl","tr","bl","br"];
 let middleEdges = ["tm","ml","mr","bm"];
 let boardToShow = "start";
 let gameBoardStillAnimating = false;
-let winnerFound = false;
+let playing = true;
+let winner = null;
 
 /* ALL COMPUTER LOGIC PSEUDO CODE
 
@@ -154,8 +155,8 @@ function addOneToMarkCountForEachPath(boxObj) {
   boxObj.paths.map( path => { pathObj[path].marks++ } )
 }
 function resetGameBoard(){
-  console.log("resetting gameboard");
-  winnerFound = false;
+  winner = undefined;
+  playing = true;
   boardToShow = "board";
   boxes.map( obj => {
     obj.checked = false;
@@ -166,18 +167,22 @@ function resetGameBoard(){
 }
 function goHomeResetBoard(){
   // not resetting everything
-  console.log('going home');
-  winnerFound = false;
   resetGameBoard();
   showBoard("start");
 }
 function delayShowResults(winningRow,resolve,reject){
-  // wait 2 seconds after the win then show the results board;
+  pathObj[winningRow].layout.map(box => { getBoxObj(box).markedColorClass = "highlight-box"});
+
   window.setTimeout( a => {
     boardToShow = "results";
     resolve(true);
   },2000);
-  pathObj[winningRow].layout.map(box => { getBoxObj(box).markedColorClass = "highlight-box"});
+
+}
+function setWinner(payload){
+  let {action:{data}} = payload;
+  playing = false;
+  winner = data;
 }
 function assignMarks(userMarkPayload) {
   let { action:{data,actionType} } = userMarkPayload;
@@ -290,7 +295,7 @@ let BoardStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT,callback)
   },
   getState: function() {
-    return { pathObj, boxes, corners, middleEdges, gameSigns, boardToShow, difficulties, difficulty, gameBoardStillAnimating, winnerFound, check4Winner}
+    return { pathObj, boxes, corners, middleEdges, gameSigns, boardToShow, difficulties, difficulty, gameBoardStillAnimating, playing, winner, check4Winner}
   }
 });
 
@@ -334,6 +339,17 @@ AppDispatcher.register(function(payload) {
       // sets computer choice to necessary function result based on what difficult is set and its preset function defined in the state ...
       let compChoice = difficulties.filter( diffs => diffs.type === difficulty )[0].fn(payload);
       updateComputerPick(compChoice);
+      BoardStore.emitChange();
+      break;
+    case "setWinner":
+      setWinner(payload);
+      BoardStore.emitChange();
+      break;
+    case "highlight":
+      new Promise(delayShowResults.bind(this,payload.action.data))
+        .then(function(resolved){
+          BoardStore.emitChange();
+        });
       BoardStore.emitChange();
       break;
     case "resetBoard":
