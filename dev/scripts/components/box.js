@@ -6,6 +6,10 @@ let Box = React.createClass({
   getInitialState: function(){
     return {playing: true}
   },
+  tieActions: function(winner,board){
+    BoardActions.setWinner(winner);
+    BoardActions.showBoard(board);
+  },
   winnerActions: function(winningRow,winner){
     // update the winner value in the store and halt any actions being fired by setting the playing variable in the store to false. The logic in handleclick relys on the true value of playing.
 
@@ -26,6 +30,7 @@ let Box = React.createClass({
           BoardActions.makeUserChoice(data);
 
           let winningRow = this.props.storeData.check4Winner();
+
           if(winningRow){
             this.winnerActions(winningRow,"user");
           } else {
@@ -35,10 +40,15 @@ let Box = React.createClass({
               let compWinningRow = this.props.storeData.check4Winner();
               if (compWinningRow) {
                 this.winnerActions(compWinningRow,"computer");
+              } else if (this.props.storeData.boardFilled()) {
+                this.tieActions("tie","results");
               }
             }.bind(this), 500);
-            // check for winner again -
-
+          }
+          // if board is filled - show tie game
+          if (this.props.storeData.boardFilled()) {
+            console.log("board filled no winner");
+            this.tieActions("tie","results");
           }
         }
 

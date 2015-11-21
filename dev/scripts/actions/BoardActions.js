@@ -68,6 +68,12 @@ let BoardActions = {
       actionType: "goHome",
       data
     });
+  },
+  showBoard: function(data){
+    AppDispatcher.handleViewAction({
+      actionType: "showBoard",
+      data
+    });
   }
 }
 

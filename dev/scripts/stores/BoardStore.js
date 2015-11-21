@@ -210,6 +210,15 @@ function check4Winner(){
   return isStreak || false;
 }
 
+function boardFilled() {
+  for (let i of boxes) {
+    if (!i.checked) {
+      return false;
+    }
+  }
+  return true;
+}
+
 
 /*///////////////////////////////
   accessory functions
@@ -295,7 +304,7 @@ let BoardStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT,callback)
   },
   getState: function() {
-    return { pathObj, boxes, corners, middleEdges, gameSigns, boardToShow, difficulties, difficulty, gameBoardStillAnimating, playing, winner, check4Winner}
+    return { pathObj, boxes, corners, middleEdges, gameSigns, boardToShow, difficulties, difficulty, gameBoardStillAnimating, playing, winner, check4Winner, boardFilled}
   }
 });
 
@@ -350,6 +359,10 @@ AppDispatcher.register(function(payload) {
         .then(function(resolved){
           BoardStore.emitChange();
         });
+      BoardStore.emitChange();
+      break;
+    case "showBoard":
+      showBoard(payload.action.data);
       BoardStore.emitChange();
       break;
     case "resetBoard":
