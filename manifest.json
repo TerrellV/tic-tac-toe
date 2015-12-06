@@ -3,7 +3,7 @@
   "name": "Tic-Tac-Toe",
   "icons": [
     {
-      "src" : "dev/images/app-icon.png",
+      "src" : "dev/images/app-icson.png",
       "sizes": "192x192",
       "type": "image/png"
     }
