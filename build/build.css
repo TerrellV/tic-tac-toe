@@ -141,16 +141,19 @@ header {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
   header h1 {
-    letter-spacing: 1px;
-    line-height: 10vh;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
     display: inline-block;
     margin: 0;
     font-family: "Roboto",sans-serif;
-    font-size: 1.5em; }
+    font-size: 2rem;
+    font-weight: 600; }
 
 #main {
   height: 90vh;
   width: 100%;
+  background-color: #00ADB5;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
@@ -166,6 +169,7 @@ header {
       position: relative;
       height: 80vh; }
       #main #app #board-container #master-board {
+        background-color: white;
         width: 50vh;
         max-width: 90vw;
         height: 50vh;
@@ -173,6 +177,8 @@ header {
         line-height: 0px;
         overflow: hidden;
         -webkit-backface-visibility: hidden;
+        border-radius: 40px;
+        box-shadow: 2px 2px 100px #098c92;
         position: absolute;
         left: 50%;
         top: 50%;
@@ -234,6 +240,7 @@ header {
             height: 100%;
             position: relative;
             box-sizing: border-box;
+            cursor: pointer;
             -webkit-transition: all 400ms ease;
             -moz-transition: all 400ms ease;
             -ms-transition: all 400ms ease;
@@ -284,6 +291,7 @@ header {
           width: 100%;
           -webkit-backface-visibility: hidden; }
           #main #app #board-container #master-board #difficulty-board .pannels .diff-pannel {
+            cursor: pointer;
             position: relative;
             top: 0px;
             width: 33.333%;
@@ -411,6 +419,7 @@ header {
           -o-transform: translate(-50%,-50%);
           transform: translate(-50%,-50%); }
           #main #app #board-container #master-board #game-board .inner-board .box {
+            cursor: pointer;
             display: inline-block;
             width: 33.333%;
             height: 33.333%;
@@ -498,7 +507,7 @@ header {
         cursor: pointer;
         vertical-align: middle;
         position: relative;
-        background-color: #00ADB5;
+        background-color: #222831;
         box-sizing: border-box;
         display: inline-block;
         width: 60px;
@@ -547,7 +556,7 @@ header {
         border: none;
         outline: none;
         border-radius: 50%;
-        background-color: #00ADB5; }
+        background-color: #222831; }
         #main #app #nav-buttons #home-button #home-icon {
           fill: #EEEEEE;
           height: 30px;
@@ -574,9 +583,6 @@ header {
   transition: all 1s ease; }
 
 @media screen and (min-width: 715px) {
-  header h1 {
-    font-size: 3em; }
-
   #main #app #board-container #master-board #options-board #text-container #text {
     font-size: 22px; }
   #main #app #board-container #master-board #difficulty-board .pannels .diff-pannel .pannel-text {

@@ -21,7 +21,7 @@ let Box = React.createClass({
   },
   handleClick: function(data){
     if (this.props.storeData.playing) {
-      if ( this.props.boxInfo.checked === false){
+      if (this.props.boxInfo.checked === false){
         // check if board is still animating
         if (this.props.storeData.gameBoardStillAnimating === false) {
           BoardActions.delayClick(1100);
@@ -47,7 +47,6 @@ let Box = React.createClass({
           }
           // if board is filled - show tie game
           if (this.props.storeData.boardFilled()) {
-            console.log("board filled no winner");
             this.tieActions("tie","results");
           }
         }

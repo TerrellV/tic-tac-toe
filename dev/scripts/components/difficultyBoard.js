@@ -4,11 +4,6 @@ import {BoardActions} from "../actions/BoardActions.js";
 import ReactCSSTransitionGroup from "../../../node_modules/react/lib/ReactCSSTransitionGroup.js";
 
 let DifficultyScreen = React.createClass({
-  getInitialState: function() {
-    return {
-
-    };
-  },
   handleClick: function(diff) {
     BoardActions.setDifficulty(diff)
   },
@@ -33,7 +28,7 @@ let DifficultyScreen = React.createClass({
       transitionEnterTimeout={2000}
       transitionAppear={true}
       transitionAppearTimeout={2000}>
-        <div id="difficulty-board" className="board mdl-shadow--8dp">
+        <div id="difficulty-board" className="board">
           <div className={"pannels " + activePannel }>
 
             <div className={"diff-pannel"} id="easy"
@@ -46,8 +41,11 @@ let DifficultyScreen = React.createClass({
               </h2>
             </div>
 
-            <div className={"diff-pannel"} id="regular"
-            onClick={this.handleClick.bind(this,"regular")}>
+            <div
+              className={"diff-pannel"}
+              id="regular"
+              onClick={this.handleClick.bind(this,"regular")}
+            >
               <svg className="icons" id="num-pad-icon">
                 <use xlinkHref={"#num-pad-icon"}></use>
               </svg>
@@ -56,8 +54,11 @@ let DifficultyScreen = React.createClass({
               </h2>
             </div>
 
-            <div className={"diff-pannel"} id="impossible"
-            onClick={this.handleClick.bind(this,"impossible")}>
+            <div
+              className={"diff-pannel"}
+              id="impossible"
+              onClick={this.handleClick.bind(this,"impossible")}
+            >
               <svg className="icons" id="fire-icon">
                 <use xlinkHref={"#fire-icon"}></use>
               </svg>

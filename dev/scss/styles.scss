@@ -19,18 +19,21 @@ header{
   color: white;
   @include box-sizing("border-box");
   h1 {
-    letter-spacing: 1px;
-    line-height: 10vh;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
     display: inline-block;
     margin: 0;
     font-family: "Roboto",sans-serif;
-    font-size:1.5em;
+    font-size: 2rem;
+    font-weight: 600;
   }
 }
 
 #main {
   height: 90vh;
   width: 100%;
+  background-color: $teal;
   @include box-sizing("border-box");
   #app {
     position: relative;
@@ -42,6 +45,7 @@ header{
       position: relative;
       height: 80vh;
       #master-board{
+        background-color: white;
         width: 50vh;
         max-width: 90vw;
         height: 50vh;
@@ -49,6 +53,8 @@ header{
         line-height: 0px;
         overflow: hidden;
         -webkit-backface-visibility: hidden;
+        border-radius: 40px;
+        box-shadow: 2px 2px 100px #098c92;
         @include center-me();
         .board {
           width: 100%;
@@ -90,6 +96,7 @@ header{
               height: 100%;
               position: relative;
               box-sizing: border-box;
+              cursor: pointer;
               @include transition("all 400ms ease");
               .mark-icon {
                 @include center-me();
@@ -131,6 +138,7 @@ header{
             width: 100%;
             -webkit-backface-visibility: hidden;
             .diff-pannel {
+              cursor: pointer;
               position: relative;
               top: 0px;
               width: 33.333%;
@@ -247,6 +255,7 @@ header{
             -webkit-backface-visibility: hidden;
             @include center-me();
             .box {
+              cursor: pointer;
               display: inline-block;
               width: 33.333%;
               height: 33.333%;
@@ -304,7 +313,7 @@ header{
         cursor: pointer;
         vertical-align: middle;
         position: relative;
-        background-color: $teal;
+        background-color: $dark;
         box-sizing: border-box;
         display: inline-block;
         width: 60px;
@@ -338,7 +347,7 @@ header{
         border: none;
         outline: none;
         border-radius: 50%;
-        background-color: $teal;
+        background-color: $dark;
         #home-icon {
           fill: $white;
           height: 30px;

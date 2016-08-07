@@ -19,7 +19,7 @@ let StartBoard = React.createClass({
       transitionEnterTimeout={1000}
       transitionAppear={true}
       transitionAppearTimeout={750}>
-        <div id="options-board" className="board mdl-shadow--8dp">
+        <div id="options-board" className="board">
           <div className={"board-options " + activeStatus}>
             <div className="options" id="option-x" onClick={this.handleClick.bind(this,"x")}>
               <svg className="mark-icon">

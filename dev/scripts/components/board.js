@@ -10,7 +10,7 @@ let Board = React.createClass({
     return {}
   },
   render: function(){
-    let {pathObj,boxes,boardToShow,gameSigns} = this.props.storeData;
+    let { pathObj, boxes, boardToShow, gameSigns } = this.props.storeData;
     let activeBoard = <h1>nothing changed</h1>;
     switch(boardToShow){
       case "board":
@@ -29,7 +29,7 @@ let Board = React.createClass({
     }
 
     return (
-      <div id="master-board" className="mdl-shadow--4dp">
+      <div id="master-board">
         {activeBoard}
       </div>
     )

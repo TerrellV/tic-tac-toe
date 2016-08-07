@@ -21,7 +21,7 @@ let ResetButton = React.createClass({
     let buttonToShow;
     if (this.props.storeData.boardToShow === "start") {
       buttonToShow = (
-          <button className="reset-btn mdl-shadow--4dp" onClick={this.handleClick.bind(this,"chooseDifficulty")}>
+          <button className="reset-btn" onClick={this.handleClick.bind(this,"chooseDifficulty")}>
             <svg id="forward-icon">
               <use xlinkHref={"#forward-icon"}></use>
             </svg>
@@ -30,7 +30,7 @@ let ResetButton = React.createClass({
     }
     else if (this.props.storeData.boardToShow === "difficulty"){
       buttonToShow = (
-          <button className="reset-btn mdl-shadow--4dp" onClick={this.handleClick.bind(this,"start")}>
+          <button className="reset-btn" onClick={this.handleClick.bind(this,"start")}>
             <svg id="forward-icon">
               <use xlinkHref={"#forward-icon"}></use>
             </svg>
@@ -38,7 +38,7 @@ let ResetButton = React.createClass({
       )
     } else {
       buttonToShow = (
-          <button className="reset-btn mdl-shadow--4dp" onClick={this.handleClick.bind(this,"reset")}>
+          <button className="reset-btn" onClick={this.handleClick.bind(this,"reset")}>
             <svg id="replay-icon">
               <use xlinkHref={"#replay-icon"}></use>
             </svg>
@@ -48,8 +48,7 @@ let ResetButton = React.createClass({
 
   return (
     <div id="nav-buttons">
-      <button id="home-button" className="mdl-shadow--4dp"
-      onClick={this.handleClick.bind(this,"go-home")}>
+      <button id="home-button" onClick={this.handleClick.bind(this,"go-home")}>
         <svg id="home-icon">
           <use xlinkHref={"#home-icon"}></use>
         </svg>

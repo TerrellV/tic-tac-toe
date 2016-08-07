@@ -28,7 +28,7 @@ let ResultsBoard = React.createClass({
       transitionLeaveTimeout={500}
       transitionAppear={true}
       transitionAppearTimeout={2000}>
-        <div id="results-board" className="board mdl-shadow--8dp" >
+        <div id="results-board" className="board" >
           <div id="text-container">
             <h2 id="results-text">{outcome}</h2>
             <h4 id="play-again-text" onClick={this.handleClick}>Play Again</h4>
