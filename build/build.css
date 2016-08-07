@@ -134,7 +134,7 @@ body {
 
 header {
   height: 10vh;
-  background-color: #222831;
+  background-color: #005256;
   text-align: center;
   color: white;
   -webkit-box-sizing: border-box;
@@ -507,7 +507,7 @@ header {
         cursor: pointer;
         vertical-align: middle;
         position: relative;
-        background-color: #222831;
+        background-color: #005256;
         box-sizing: border-box;
         display: inline-block;
         width: 60px;
@@ -533,7 +533,7 @@ header {
           transform: translate(-50%,-50%);
           height: 30px;
           width: 30px;
-          fill: #EEEEEE; }
+          fill: white; }
         #main #app #nav-buttons .reset-btn #replay-icon {
           position: absolute;
           left: 50%;
@@ -545,7 +545,7 @@ header {
           transform: translate(-50%,-50%);
           height: 30px;
           width: 30px;
-          fill: #EEEEEE; }
+          fill: white; }
       #main #app #nav-buttons #home-button {
         cursor: pointer;
         margin: 0px 40px;
@@ -556,7 +556,7 @@ header {
         border: none;
         outline: none;
         border-radius: 50%;
-        background-color: #222831; }
+        background-color: #005256; }
         #main #app #nav-buttons #home-button #home-icon {
           fill: #EEEEEE;
           height: 30px;
@@ -582,6 +582,11 @@ header {
   -o-transition: all 1s ease;
   transition: all 1s ease; }
 
+@media (max-width: 714px) {
+  header > h1 {
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: 1px; } }
 @media screen and (min-width: 715px) {
   #main #app #board-container #master-board #options-board #text-container #text {
     font-size: 22px; }

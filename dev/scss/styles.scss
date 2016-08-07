@@ -14,7 +14,7 @@ body{
 
 header{
   height: 10vh;
-  background-color: $dark;
+  background-color: $dark-teal;
   text-align: center;
   color: white;
   @include box-sizing("border-box");
@@ -313,7 +313,7 @@ header{
         cursor: pointer;
         vertical-align: middle;
         position: relative;
-        background-color: $dark;
+        background-color: $dark-teal;
         box-sizing: border-box;
         display: inline-block;
         width: 60px;
@@ -328,13 +328,13 @@ header{
           @include center-me();
           height: 30px;
           width: 30px;
-          fill: $white;
+          fill: white;
         }
         #replay-icon {
           @include center-me();
           height: 30px;
           width: 30px;
-          fill: $white;
+          fill: white;
         }
       }
       #home-button {
@@ -347,7 +347,7 @@ header{
         border: none;
         outline: none;
         border-radius: 50%;
-        background-color: $dark;
+        background-color: $dark-teal;
         #home-icon {
           fill: $white;
           height: 30px;
